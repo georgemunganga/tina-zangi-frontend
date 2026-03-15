@@ -18,7 +18,7 @@ const StoryWorld = () => {
              }}></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+      <div className="site-shell relative z-10">
         {/* Section Header with Artistic Touch */}
         <div className="text-center mb-20">
           <div className="inline-flex items-center gap-4 mb-6">
@@ -77,6 +77,8 @@ const StoryWorld = () => {
                     src={location.image}
                     alt={location.name}
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-125 group-hover:rotate-2"
+                    loading="lazy"
+                    decoding="async"
                   />
                   
                   {/* Gradient Overlays - More Artistic */}

@@ -16,7 +16,7 @@ const MeetZangi = () => {
       <div className="absolute top-20 right-[-10%] w-[500px] h-[500px] bg-gradient-cool rounded-full blur-[120px] opacity-10"></div>
       <div className="absolute bottom-20 left-[-10%] w-[500px] h-[500px] bg-gradient-warm rounded-full blur-[120px] opacity-10"></div>
 
-      <div className="relative max-w-[1300px] mx-auto px-6 sm:px-12 z-10">
+      <div className="site-shell relative z-10">
         
         {/* Section Header - Professional Spacing */}
         <div className="text-center mb-20 lg:mb-24">

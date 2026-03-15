@@ -5,7 +5,7 @@ import { Star, Quote } from 'lucide-react';
 const Testimonials = () => {
   return (
     <section className="py-20 sm:py-28 bg-gradient-to-b from-white to-amber-50/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="site-shell">
         {/* Section Header */}
         <div className="text-center mb-16">
           <p 

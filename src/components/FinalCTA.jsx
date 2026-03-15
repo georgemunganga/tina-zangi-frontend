@@ -1,121 +1,124 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ChevronRight, Mail } from 'lucide-react';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { ChevronRight, Mail } from "lucide-react";
+import { toast } from "sonner";
 
 const FinalCTA = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleNewsletterSubmit = (e) => {
-    e.preventDefault();
+  const handleNewsletterSubmit = (event) => {
+    event.preventDefault();
     setIsSubmitting(true);
-    
-    // Mock newsletter signup
-    setTimeout(() => {
-      toast.success('Welcome to the Zangi adventure! Check your email for confirmation.');
-      setEmail('');
+
+    window.setTimeout(() => {
+      toast.success("Welcome to the Zangi world. Check your email for confirmation.");
+      setEmail("");
       setIsSubmitting(false);
     }, 1000);
   };
 
   return (
-    <section 
-      className="relative py-20 sm:py-28 overflow-hidden"
+    <section
+      className="relative overflow-hidden py-20 sm:py-28"
       style={{
-        background: 'linear-gradient(135deg, #893614 0%, #c43500 100%)'
+        background: "linear-gradient(135deg, #7c2d12 0%, #c2410c 100%)",
       }}
     >
-      {/* Decorative Background Elements */}
       <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-10 left-10 w-64 h-64 rounded-full bg-white blur-3xl"></div>
-        <div className="absolute bottom-10 right-10 w-96 h-96 rounded-full bg-white blur-3xl"></div>
+        <div className="absolute left-10 top-10 h-64 w-64 rounded-full bg-white blur-3xl" />
+        <div className="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-white blur-3xl" />
       </div>
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Main CTA Content */}
-        <h2 
-          className="text-7xl sm:text-8xl md:text-9xl lg:text-[120px] font-bold text-white mb-6 leading-none"
-          style={{ 
-            fontFamily: "'ADVENTURES', sans-serif",
-            textShadow: '6px 6px 12px rgba(0,0,0,0.5)',
-            letterSpacing: '0.02em'
-          }}
-        >
-          Ready for Adventure?
-        </h2>
-        
-        <p className="text-xl sm:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed">
-          Give your child the gift of adventure, culture, and courage. Start the Zangi journey today.
-        </p>
-
-        {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
-          <Link
-            to="/books"
-            className="inline-flex items-center gap-3 px-10 py-5 rounded-full text-lg font-bold bg-white transition-all duration-300 hover:scale-110 hover:shadow-2xl group"
-            style={{ color: '#893614' }}
-          >
-            <span>Shop Books Now</span>
-            <ChevronRight 
-              size={24} 
-              className="transition-transform duration-300 group-hover:translate-x-2" 
-            />
-          </Link>
-
-          <Link
-            to="/story"
-            className="inline-flex items-center gap-3 px-10 py-5 rounded-full text-lg font-bold text-white border-2 border-white transition-all duration-300 hover:bg-white hover:scale-105 hover:shadow-2xl group"
-            style={{ 
-              backgroundColor: 'transparent',
+      <div className="site-shell relative">
+        <div className="mx-auto max-w-5xl text-center">
+          <h2
+            className="mb-6 text-7xl font-bold leading-none text-white sm:text-8xl md:text-9xl lg:text-[120px]"
+            style={{
+              fontFamily: "'ADVENTURES', sans-serif",
+              textShadow: "6px 6px 12px rgba(0,0,0,0.5)",
+              letterSpacing: "0.02em",
             }}
-            onMouseEnter={(e) => e.currentTarget.style.color = '#893614'}
-            onMouseLeave={(e) => e.currentTarget.style.color = '#fff'}
           >
-            <span>Explore the Story</span>
-          </Link>
-        </div>
+            Ready to choose your next format?
+          </h2>
 
-        {/* Newsletter Signup */}
-        <div className="max-w-xl mx-auto">
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
-            <h3 
-              className="text-2xl font-bold text-white mb-3"
-              style={{ fontFamily: "'Agu Display', serif" }}
+          <p className="mx-auto mb-12 max-w-3xl text-xl leading-relaxed text-white/90 sm:text-2xl">
+            Browse the books, pick digital or hardcopy, and keep every order in
+            one place through the Zangi portal.
+          </p>
+
+          <div className="mb-16 flex flex-col items-center justify-center gap-6 sm:flex-row">
+            <Link
+              to="/shop"
+              className="group inline-flex items-center gap-3 rounded-full bg-white px-10 py-5 text-lg font-bold transition-all duration-300 hover:scale-110 hover:shadow-2xl"
+              style={{ color: "#7c2d12" }}
             >
-              Join the Adventure
-            </h3>
-            <p className="text-white/80 mb-6">
-              Subscribe to get updates on new books, activities, and special offers
-            </p>
-            
-            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3">
-              <div className="flex-1 relative">
-                <Mail 
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" 
-                  size={20} 
-                />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                  className="w-full pl-12 pr-4 py-4 rounded-full text-gray-800 focus:outline-none focus:ring-4 focus:ring-white/30 transition-all"
-                />
-              </div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="px-8 py-4 rounded-full font-bold transition-all duration-300 hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-                style={{ 
-                  backgroundColor: '#24a3ba',
-                  color: '#fff'
-                }}
+              <span>Open the shop</span>
+              <ChevronRight
+                size={24}
+                className="transition-transform duration-300 group-hover:translate-x-2"
+              />
+            </Link>
+
+            <Link
+              to="/portal/login"
+              className="group inline-flex items-center gap-3 rounded-full border-2 border-white bg-transparent px-10 py-5 text-lg font-bold text-white transition-all duration-300 hover:scale-105 hover:bg-white hover:shadow-2xl"
+              onMouseEnter={(event) => {
+                event.currentTarget.style.color = "#7c2d12";
+              }}
+              onMouseLeave={(event) => {
+                event.currentTarget.style.color = "#fff";
+              }}
+            >
+              <span>Visit the portal</span>
+            </Link>
+          </div>
+
+          <div className="mx-auto max-w-xl">
+            <div className="rounded-2xl border border-white/20 bg-white/10 p-8 backdrop-blur-md">
+              <h3
+                className="mb-3 text-2xl font-bold text-white"
+                style={{ fontFamily: "'Agu Display', serif" }}
               >
-                {isSubmitting ? 'Subscribing...' : 'Subscribe'}
-              </button>
-            </form>
+                Join the Adventure
+              </h3>
+              <p className="mb-6 text-white/80">
+                Subscribe to hear about new titles, learning ideas, and format
+                releases.
+              </p>
+
+              <form
+                onSubmit={handleNewsletterSubmit}
+                className="flex flex-col gap-3 sm:flex-row"
+              >
+                <div className="relative flex-1">
+                  <Mail
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                    size={20}
+                  />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    placeholder="Enter your email"
+                    required
+                    className="w-full rounded-full py-4 pl-12 pr-4 text-gray-800 transition-all focus:outline-none focus:ring-4 focus:ring-white/30"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="rounded-full px-8 py-4 font-bold transition-all duration-300 hover:scale-105 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+                  style={{
+                    backgroundColor: "#0f766e",
+                    color: "#fff",
+                  }}
+                >
+                  {isSubmitting ? "Subscribing..." : "Subscribe"}
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

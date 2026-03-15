@@ -28,6 +28,32 @@ main {
   background: linear-gradient(180deg, #ffffff 0%, #fef9f3 100%);
 }
 
+/* Shared page gutter for consistent left/right spacing */
+.site-shell {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-inline: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .site-shell {
+    padding-inline: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .site-shell {
+    padding-inline: 4rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .site-shell {
+    padding-inline: 5rem;
+  }
+}
+
 /* Custom Scrollbar - Modern Style */
 ::-webkit-scrollbar {
   width: 12px;

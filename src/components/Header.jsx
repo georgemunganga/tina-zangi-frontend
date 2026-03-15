@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { Menu, X, ShoppingBag } from 'lucide-react';
-import { navigationItems } from '../data/mock';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { LayoutDashboard, Menu, ShoppingBag, X } from "lucide-react";
+import { navigationItems } from "@/data/mock";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -11,66 +11,74 @@ const Header = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled 
-          ? 'bg-white/95 backdrop-blur-md shadow-lg' 
-          : 'bg-transparent'
+    <header
+      className={`fixed left-0 right-0 top-0 z-50 transition-all duration-500 ${
+        isScrolled ? "bg-white/95 shadow-lg backdrop-blur-md" : "bg-transparent"
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          {/* Logo */}
-          <Link 
-            to="/" 
+      <div className="site-shell">
+        <div className="flex h-20 items-center justify-between">
+          <Link
+            to="/"
             className="text-3xl font-bold tracking-tight transition-all duration-300 hover:scale-105"
-            style={{ 
+            style={{
               fontFamily: "'ADVENTURES', sans-serif",
-              color: isScrolled ? '#893614' : '#fff',
-              textShadow: isScrolled ? 'none' : '3px 3px 6px rgba(0,0,0,0.5)',
-              fontSize: '2rem',
-              letterSpacing: '0.05em'
+              color: isScrolled ? "#7c2d12" : "#fff",
+              textShadow: isScrolled ? "none" : "3px 3px 6px rgba(0,0,0,0.5)",
+              fontSize: "2rem",
+              letterSpacing: "0.05em",
             }}
           >
             ZANGI
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden items-center space-x-8 md:flex">
             {navigationItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.path}
-                className={`text-sm font-medium tracking-wide transition-all duration-300 hover:scale-105 relative group ${
-                  isScrolled ? 'text-gray-800' : 'text-white'
+                className={`group relative text-sm font-medium tracking-wide transition-all duration-300 hover:scale-105 ${
+                  isScrolled ? "text-gray-800" : "text-white"
                 }`}
               >
                 {item.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[#c43500] transition-all duration-300 group-hover:w-full"></span>
+                <span className="absolute bottom-0 left-0 h-0.5 w-0 bg-[#c2410c] transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
-            
-            {/* CTA Button */}
+
             <Link
-              to="/books"
-              className="flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
-              style={{ backgroundColor: '#c43500' }}
+              to="/shop"
+              className="flex items-center gap-2 rounded-full px-6 py-2.5 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              style={{ backgroundColor: "#c2410c" }}
             >
               <ShoppingBag size={18} />
-              <span>Shop Books</span>
+              <span>Shop</span>
+            </Link>
+
+            <Link
+              to="/portal/login"
+              className={`flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-semibold transition-all duration-300 hover:scale-105 ${
+                isScrolled
+                  ? "border-slate-300 bg-white text-slate-800"
+                  : "border-white/30 bg-white/10 text-white"
+              }`}
+            >
+              <LayoutDashboard size={16} />
+              <span>Portal</span>
             </Link>
           </nav>
 
-          {/* Mobile Menu Button */}
           <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 rounded-lg transition-colors ${
-              isScrolled ? 'text-gray-800' : 'text-white'
+            type="button"
+            onClick={() => setIsMobileMenuOpen((current) => !current)}
+            className={`rounded-lg p-2 transition-colors md:hidden ${
+              isScrolled ? "text-gray-800" : "text-white"
             }`}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -78,32 +86,39 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200 shadow-xl">
-          <nav className="px-4 py-6 space-y-4">
+      {isMobileMenuOpen ? (
+        <div className="border-t border-gray-200 bg-white shadow-xl md:hidden">
+          <nav className="site-shell space-y-4 py-6">
             {navigationItems.map((item) => (
               <Link
                 key={item.name}
                 to={item.path}
-                className="block text-gray-800 font-medium py-2 px-4 rounded-lg hover:bg-gray-100 transition-colors"
+                className="block rounded-lg px-4 py-2 font-medium text-gray-800 transition-colors hover:bg-gray-100"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {item.name}
               </Link>
             ))}
             <Link
-              to="/books"
-              className="flex items-center justify-center gap-2 w-full px-6 py-3 rounded-full font-semibold text-white transition-all duration-300"
-              style={{ backgroundColor: '#c43500' }}
+              to="/shop"
+              className="flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 font-semibold text-white transition-all duration-300"
+              style={{ backgroundColor: "#c2410c" }}
               onClick={() => setIsMobileMenuOpen(false)}
             >
               <ShoppingBag size={18} />
-              <span>Shop Books</span>
+              <span>Open Shop</span>
+            </Link>
+            <Link
+              to="/portal/login"
+              className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 px-6 py-3 font-semibold text-slate-800 transition-all duration-300"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <LayoutDashboard size={18} />
+              <span>Portal</span>
             </Link>
           </nav>
         </div>
-      )}
+      ) : null}
     </header>
   );
 };
