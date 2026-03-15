@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 import { toast } from "sonner";
 import PageHero from "@/components/PageHero";
 import { contactDetails } from "@/data/mock";
@@ -24,6 +25,38 @@ const ContactPage = () => {
         title="Talk to the Zangi team."
         description="Use this page for general support, bulk-order questions, school partnerships, or product guidance."
       />
+
+      <section className="bg-[#fffaf5] pb-6 pt-12">
+        <div className="site-shell">
+          <div className="grid gap-4 rounded-[2rem] border border-amber-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.05)] md:grid-cols-[1.05fr_0.95fr] md:items-center">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+                Prefer self-serve help?
+              </p>
+              <p className="mt-3 text-base leading-7 text-slate-600">
+                The support center includes the policy pages, FAQ, payment help,
+                order tracking guidance, and event ticket instructions.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 md:justify-end">
+              <Link
+                to="/help/overview"
+                className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                <span>Open help center</span>
+                <ArrowRight size={16} />
+              </Link>
+              <Link
+                to="/help/contact-support"
+                className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                <span>Support article</span>
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <section className="bg-white py-20 sm:py-28">
         <div className="site-shell grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">

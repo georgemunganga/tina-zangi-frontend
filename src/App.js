@@ -17,6 +17,8 @@ const EventDetailPage = lazy(() => import("@/pages/EventDetailPage"));
 const EventCheckoutPage = lazy(() => import("@/pages/EventCheckoutPage"));
 const AboutAuthorPage = lazy(() => import("@/pages/AboutAuthorPage"));
 const ContactPage = lazy(() => import("@/pages/ContactPage"));
+const SupportCenterLayout = lazy(() => import("@/components/SupportCenterLayout"));
+const SupportArticlePage = lazy(() => import("@/pages/SupportArticlePage"));
 const PortalLoginPage = lazy(() => import("@/pages/PortalLoginPage"));
 const PortalDashboardPage = lazy(() => import("@/pages/PortalDashboardPage"));
 
@@ -61,6 +63,11 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
             </Route>
 
+            <Route path="/help" element={<SupportCenterLayout />}>
+              <Route index element={<Navigate to="overview" replace />} />
+              <Route path=":slug" element={<SupportArticlePage />} />
+              <Route path="*" element={<Navigate to="overview" replace />} />
+            </Route>
             <Route path="/portal/login" element={<PortalLoginPage />} />
             <Route path="/portal" element={<PortalDashboardPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />

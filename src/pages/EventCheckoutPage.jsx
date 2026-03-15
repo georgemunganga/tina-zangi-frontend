@@ -443,6 +443,26 @@ const EventCheckoutPage = () => {
                     Only a masked payment method reference is retained in this mock
                     checkout after payment submission.
                   </p>
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <Link
+                      to="/help/payments"
+                      className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600"
+                    >
+                      Payment help
+                    </Link>
+                    <Link
+                      to="/help/event-tickets"
+                      className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600"
+                    >
+                      Event tickets
+                    </Link>
+                    <Link
+                      to="/help/refund-policy"
+                      className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600"
+                    >
+                      Refund policy
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

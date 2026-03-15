@@ -11,6 +11,7 @@ export const navigationItems = [
 export const footerNavigation = [
   { name: "Activities", path: "/activities" },
   { name: "About the Author", path: "/about-author" },
+  { name: "Help Center", path: "/help/overview" },
   { name: "Portal Login", path: "/portal/login" },
 ];
 

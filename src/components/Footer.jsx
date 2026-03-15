@@ -15,6 +15,7 @@ import {
   navigationItems,
   socialLinks,
 } from "@/data/mock";
+import { supportFooterLinks } from "@/data/support";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -153,9 +154,18 @@ const Footer = () => {
         <div className="site-shell py-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p className="text-center text-sm text-gray-400 sm:text-left">
-              © {currentYear} Zangi. All rights reserved.
+              Copyright {currentYear} Zangi. All rights reserved.
             </p>
-            <div className="flex gap-6 text-sm">
+            <div className="flex flex-wrap justify-center gap-4 text-sm sm:justify-end">
+              {supportFooterLinks.map((item) => (
+                <Link
+                  key={item.to}
+                  to={item.to}
+                  className="text-gray-400 transition-colors hover:text-white"
+                >
+                  {item.label}
+                </Link>
+              ))}
               <Link
                 to="/portal/login"
                 className="text-gray-400 transition-colors hover:text-white"
@@ -166,7 +176,7 @@ const Footer = () => {
                 to="/contact"
                 className="text-gray-400 transition-colors hover:text-white"
               >
-                Bulk Orders
+                Contact
               </Link>
             </div>
           </div>

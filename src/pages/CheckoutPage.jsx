@@ -319,6 +319,32 @@ const CheckoutPage = () => {
                 Online payments are mocked in this phase. Orders appear in the
                 portal with only masked payment metadata after submission.
               </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link
+                  to="/help/payments"
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600"
+                >
+                  Payment help
+                </Link>
+                <Link
+                  to={
+                    selectedFormat.type === "digital"
+                      ? "/help/digital-downloads"
+                      : "/help/shipping-delivery"
+                  }
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600"
+                >
+                  {selectedFormat.type === "digital"
+                    ? "Digital delivery"
+                    : "Shipping guide"}
+                </Link>
+                <Link
+                  to="/help/refund-policy"
+                  className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-600"
+                >
+                  Refund policy
+                </Link>
+              </div>
             </div>
           </aside>
         </div>

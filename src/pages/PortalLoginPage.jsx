@@ -44,6 +44,12 @@ const PortalLoginPage = () => {
             >
               Back to site
             </Link>
+            <Link
+              to="/help/overview"
+              className="ml-3 inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white/85"
+            >
+              Help Center
+            </Link>
             <div className="mt-10">
               <p className="text-sm font-semibold uppercase tracking-[0.32em] text-white/60">
                 Portal access
@@ -58,6 +64,10 @@ const PortalLoginPage = () => {
                 The portal is a dedicated experience, separate from the public
                 website. It keeps order history, digital event passes,
                 fulfillment progress, and role-based views in one place.
+              </p>
+              <p className="mt-4 max-w-xl text-sm leading-7 text-white/70">
+                If you need checkout, refund, or ticket guidance before logging
+                in, use the public help center.
               </p>
             </div>
 
