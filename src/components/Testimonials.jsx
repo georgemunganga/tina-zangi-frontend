@@ -1,88 +1,51 @@
-import React from 'react';
-import { testimonials } from '../data/mock';
-import { Star, Quote } from 'lucide-react';
+import React from "react";
+import { Quote, Star } from "lucide-react";
+import { testimonials } from "@/data/mock";
 
 const Testimonials = () => {
   return (
-    <section className="py-20 sm:py-28 bg-gradient-to-b from-white to-amber-50/30">
+    <section className="bg-white py-20 sm:py-28">
       <div className="site-shell">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <p 
-            className="text-lg uppercase tracking-widest mb-4"
-            style={{ color: '#24a3ba' }}
-          >
-            What Parents Say
+        <div className="max-w-3xl">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
+            Social proof
           </p>
-          <h2 
-            className="text-7xl sm:text-8xl md:text-9xl lg:text-[110px] font-bold mb-6 leading-none"
-            style={{ 
-              fontFamily: "'ADVENTURES', sans-serif",
-              background: 'linear-gradient(135deg, #893614 0%, #c43500 50%, #f4a261 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              letterSpacing: '0.02em'
-            }}
+          <h2
+            className="mt-4 text-5xl font-bold leading-none text-[#7c2d12] sm:text-6xl lg:text-[4.4rem]"
+            style={{ fontFamily: "'ADVENTURES', sans-serif" }}
           >
-            Real Stories, Real Impact
+            What readers and adults respond to.
           </h2>
-          <div className="w-24 h-1.5 mx-auto" style={{ backgroundColor: '#c43500' }}></div>
+          <p className="mt-5 text-lg leading-8 text-slate-700">
+            Early responses center on how the books feel: warm, meaningful, and
+            worth staying with after the page turns.
+          </p>
         </div>
 
-        {/* Testimonials Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-          {testimonials.map((testimonial, index) => (
-            <div
+        <div className="mt-12 grid gap-6 lg:grid-cols-3">
+          {testimonials.map((testimonial) => (
+            <article
               key={testimonial.name}
-              className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
-              style={{
-                transitionDelay: `${index * 150}ms`
-              }}
+              className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-[0_18px_48px_rgba(15,23,42,0.06)]"
             >
-              {/* Quote Icon */}
-              <div 
-                className="absolute top-6 right-6 opacity-10 transition-all duration-500 group-hover:opacity-20"
-              >
-                <Quote size={60} style={{ color: '#893614' }} />
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex gap-1 text-[#ea580c]">
+                  {[...Array(testimonial.rating)].map((_, index) => (
+                    <Star key={index} size={18} fill="currentColor" />
+                  ))}
+                </div>
+                <Quote size={20} className="text-[#ea580c]/40" />
               </div>
 
-              {/* Rating Stars */}
-              <div className="flex gap-1 mb-6">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star 
-                    key={i} 
-                    size={20} 
-                    fill="#c43500" 
-                    style={{ color: '#c43500' }}
-                  />
-                ))}
-              </div>
-
-              {/* Quote */}
-              <p className="text-gray-700 leading-relaxed mb-6 text-lg relative z-10">
+              <p className="mt-6 text-lg leading-8 text-slate-700">
                 "{testimonial.quote}"
               </p>
 
-              {/* Author */}
-              <div className="border-t border-gray-200 pt-6">
-                <p 
-                  className="font-bold text-lg mb-1"
-                  style={{ color: '#893614' }}
-                >
-                  {testimonial.name}
-                </p>
-                <p className="text-sm text-gray-500">
-                  {testimonial.role}
-                </p>
+              <div className="mt-6 border-t border-slate-200 pt-5">
+                <p className="font-semibold text-[#7c2d12]">{testimonial.name}</p>
+                <p className="mt-1 text-sm text-slate-500">{testimonial.role}</p>
               </div>
-
-              {/* Decorative Border */}
-              <div 
-                className="absolute bottom-0 left-0 right-0 h-1.5 rounded-b-2xl transition-all duration-500 scale-x-0 group-hover:scale-x-100"
-                style={{ backgroundColor: '#24a3ba' }}
-              ></div>
-            </div>
+            </article>
           ))}
         </div>
       </div>

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import { activityHighlights } from "@/data/mock";
+import { Button } from "@/components/ui/button";
 
 const ActivitiesPage = () => {
   return (
@@ -25,12 +26,12 @@ const ActivitiesPage = () => {
                 key={item.title}
                 className={`rounded-[2rem] p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)] ${
                   index === 1
-                    ? "bg-slate-950 text-white"
+                    ? "bg-black text-white"
                     : "border border-amber-100 bg-white"
                 }`}
               >
                 <p
-                  className={`text-sm font-semibold uppercase tracking-[0.28em] ${
+                  className={`text-sm font-semibold uppercase tracking-[0.16em] ${
                     index === 1 ? "text-[#5eead4]" : "text-[#0f766e]"
                   }`}
                 >
@@ -55,7 +56,7 @@ const ActivitiesPage = () => {
           </div>
 
           <div className="mt-16 rounded-[2rem] border border-amber-100 bg-[#fffaf5] p-8 sm:p-10">
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
               Built for reuse
             </p>
             <h2
@@ -69,13 +70,12 @@ const ActivitiesPage = () => {
               creative repetition, family prompts, classroom extension, and
               guided reflection after the story itself has landed.
             </p>
-            <Link
-              to="/shop/zangi-adventure-activity-book"
-              className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#c2410c] px-6 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
-            >
-              <span>Choose a format for the activity book</span>
-              <ArrowRight size={16} />
-            </Link>
+            <Button asChild variant="brand" size="pill" className="mt-7">
+              <Link to="/shop/zangi-adventure-activity-book">
+                <span>Choose a format for the activity book</span>
+                <ArrowRight size={16} />
+              </Link>
+            </Button>
           </div>
         </div>
       </section>

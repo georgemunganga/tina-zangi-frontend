@@ -1,10 +1,9 @@
 export const navigationItems = [
   { name: "Home", path: "/" },
-  { name: "The Story", path: "/story" },
-  { name: "Books", path: "/books" },
+  // { name: "The Story", path: "/story" },
+  // { name: "Books", path: "/books" },
   { name: "Events", path: "/events" },
   { name: "Parents", path: "/parents" },
-  { name: "Shop", path: "/shop" },
   { name: "Contact", path: "/contact" },
 ];
 
@@ -24,11 +23,9 @@ export const socialLinks = {
 
 export const heroData = {
   subtitle: "The Flag of Kindness",
-  tagline: "A premium African story world for brave, curious readers.",
-  description:
-    "Meet Zangi through storybooks, activity books, and a world built to spark courage, culture, and imagination.",
-  characterImage:
-    "https://customer-assets.emergentagent.com/job_zangi-journey/artifacts/at0yxmwm_The%20flag%20of%20kindness%20%282%29.png",
+  tagline: "Join Zangi on a african adventure for brave, curious readers.",
+  description:"Meet Zangi through storybooks, activity books, and a world built to spark courage, culture, and imagination.",
+  characterImage: "/images/herocharacter.png",
   primaryCtaText: "Explore the Story",
   primaryCtaLink: "/story",
   secondaryCtaText: "Shop the Books",
@@ -110,12 +107,8 @@ export const books = [
       "The signature Zangi storybook, designed to balance emotional depth, adventure, and visually rich worldbuilding.",
     longDescription:
       "Follow Zangi through a story about courage, friendship, and the quiet power of choosing kindness when it matters most. The book is built for readers who want more than a simple bedtime story: it is warm, visually ambitious, and grounded in values that stay with children after the last page.",
-    image:
-      "https://images.unsplash.com/photo-1512820790803-83ca734da794?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHxib29rJTIwY292ZXIlMjB0YWJsZXxlbnwwfHx8fDE3OTQ2OTM0NzN8MA&ixlib=rb-4.1.0&q=85",
-    gallery: [
-      "https://images.unsplash.com/photo-1512820790803-83ca734da794?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHxib29rJTIwY292ZXIlMjB0YWJsZXxlbnwwfHx8fDE3OTQ2OTM0NzN8MA&ixlib=rb-4.1.0&q=85",
-      "https://images.unsplash.com/photo-1507842217343-583bb7270b66?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwyfHxjaGlsZHJlbiUyMGJvb2t8ZW58MHx8fHwxNzk0NjkzNTA0fDA&ixlib=rb-4.1.0&q=85",
-    ],
+    image: "/images/zangibook.png",
+    gallery: ["/images/zangibook.png"],
     features: [
       "Story-led reading experience with premium visual direction",
       "Character arc rooted in empathy, courage, and cultural pride",
@@ -131,14 +124,14 @@ export const books = [
       {
         type: "digital",
         label: "Digital",
-        price: 14.99,
+        price: 10.7,
         description: "Instant reading access inside the Zangi portal once processed.",
-        fulfillment: "Portal delivery with download-ready status updates",
+        fulfillment: "Delivery is sent your email or can be Pdf Downloaded on the portal",
       },
       {
         type: "hardcopy",
         label: "Hardcopy",
-        price: 24.99,
+        price: 12.8,
         description: "Premium printed edition for gifting, family reading, and shelves.",
         fulfillment: "Physical order tracked through portal milestones",
       },
@@ -158,12 +151,8 @@ export const books = [
       "A hands-on companion that turns the Zangi story world into creative prompts, puzzles, and learning moments.",
     longDescription:
       "The activity book extends the story world through drawing prompts, reflection pages, map play, and guided creative exercises. It is designed for children who want to stay in the world longer and for adults who want practical ways to keep reading active, thoughtful, and fun.",
-    image:
-      "https://images.unsplash.com/photo-1516979187457-637abb4f9353?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHxhY3Rpdml0eSUyMGJvb2t8ZW58MHx8fHwxNzk0NjkzNTYwfDA&ixlib=rb-4.1.0&q=85",
-    gallery: [
-      "https://images.unsplash.com/photo-1516979187457-637abb4f9353?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHxhY3Rpdml0eSUyMGJvb2t8ZW58MHx8fHwxNzk0NjkzNTYwfDA&ixlib=rb-4.1.0&q=85",
-      "https://images.unsplash.com/photo-1455390582262-044cdead277a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwzfHx3cml0aW5nJTIwcGFwZXJ8ZW58MHx8fHwxNzk0NjkzNTg1fDA&ixlib=rb-4.1.0&q=85",
-    ],
+    image: "/images/flag.png",
+    gallery: ["/images/flag.png"],
     features: [
       "Prompt-based activities connected to the Zangi universe",
       "Creative exercises for reading development and imagination",
@@ -197,82 +186,87 @@ export const books = [
 
 export const events = [
   {
-    id: "kindness-story-evening",
-    slug: "kindness-story-evening-johannesburg",
-    title: "Zangi Kindness Story Evening",
-    subtitle: "An in-person evening of read-aloud storytelling and guided family reflection.",
+    id: "mulungushi-book-launch",
+    slug: "zangi-book-launch-mulungushi-lusaka",
+    title: "Zangi's Flag Book Launch",
+    subtitle:
+      "A live family book launch at Mulungushi in Lusaka with storytelling, launch moments, and warm community energy.",
     excerpt:
-      "Join families, educators, and young readers for a premium live Zangi story session in Johannesburg.",
+      "Right now the Zangi events section is focused on one physical launch in Lusaka for children, parents, schools, and invited community guests.",
     description:
-      "This single-evening event brings the world of Zangi off the page through a cinematic live reading, audience reflection prompts, and a short creative segment designed for children and the adults reading alongside them.",
+      "This launch event introduces the world of Zangi in person through a live reading, a formal book reveal, family-friendly reflection moments, and a closing atmosphere built around books, culture, and imagination. It is designed to feel more like a real launch experience than a simple reading session.",
     startDate: "2026-05-22",
+    startsAt: "2026-05-22T18:00:00+02:00",
+    liveWindowHours: 5,
     dateLabel: "May 22, 2026",
-    timeLabel: "6:00 PM - 7:30 PM SAST",
-    locationLabel: "The Guild Hall, Rosebank, Johannesburg",
+    timeLabel: "6:00 PM - 7:30 PM CAT",
+    locationLabel: "Mulungushi International Conference Centre, Lusaka",
     mode: "in-person",
-    image:
-      "https://images.unsplash.com/photo-1511578314322-379afb476865?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwyfHxldmVudCUyMGF1ZGllbmNlfGVufDB8fHx8MTc5NDY5Mzg0OHww&ixlib=rb-4.1.0&q=85",
+    image: "/images/banner bg (1).png",
+    teaserImage: "/images/Save the date  23rd December (10) (1).png",
     heroTheme: {
       primary: "rgba(124,45,18,0.88)",
       secondary: "rgba(15,118,110,0.72)",
       accent: "#fde68a",
       surface: "#fff7ed",
     },
-    audienceLabel: "Families + educators",
-    audience: "Parents, children, teachers, and schools looking for a premium community reading event.",
+    audienceLabel: "Families + schools + community",
+    audience:
+      "Parents, children, teachers, school leaders, media guests, and community supporters joining the first live Zangi's Flag Book Launch in Lusaka.",
     highlights: [
-      "Live dramatic reading from the Zangi story world",
-      "A guided kindness-and-courage reflection segment",
-      "A closing creative challenge children can continue at home",
+      "A live Zangi reading and launch reveal on stage",
+      "A family-friendly launch atmosphere with story and reflection",
+      "A closing moment for photos, conversation, and book excitement",
     ],
     familyExperience: [
       {
-        title: "Immersive story performance",
+        title: "A real launch atmosphere",
         description:
-          "Children and parents experience a live Zangi read-aloud with a warm, cinematic atmosphere rather than a standard school assembly feel.",
+          "Families arrive to a launch setting that feels special, warm, and event-led rather than like a classroom stop or a simple promo table.",
       },
       {
-        title: "Shared reflection moments",
+        title: "Storytelling that holds children's attention",
         description:
-          "Families are guided through kindness, courage, and empathy prompts that make the event feel participatory and memorable.",
+          "The book launch includes a live Zangi reading moment designed to keep children engaged while giving parents a clear sense of the story world.",
       },
       {
-        title: "A creative ending to take home",
+        title: "A memorable family outing",
         description:
-          "The evening closes with a small challenge children can continue later at home, helping the story live beyond the venue.",
+          "The event closes with space for conversation, photos, and the excitement that should come with seeing a children's book launch live.",
       },
     ],
     whoItsFor: [
-      "Parents who want a beautiful, story-led family outing",
-      "Children who enjoy live storytelling and imaginative worlds",
-      "Teachers and schools exploring premium reading experiences",
+      "Parents looking for a meaningful family outing in Lusaka",
+      "Children excited by live storytelling and new story worlds",
+      "Schools, educators, and community partners supporting reading culture",
     ],
     scheduleItems: [
       {
         label: "Arrival and welcome",
         detail:
-          "Doors open 30 minutes early for check-in, soft music, and settling families into the story-space.",
+          "Guests arrive, check in with their digital passes, and settle into the launch atmosphere before the program begins.",
       },
       {
-        label: "Live Zangi reading",
+        label: "Book launch opening",
         detail:
-          "A featured reading performance introduces the event theme and brings the world of Zangi to life on stage.",
+          "The stage program opens with a welcome, framing the meaning of the launch and introducing the Zangi world to the room.",
       },
       {
-        label: "Family reflection segment",
+        label: "Live reading and reveal",
         detail:
-          "Parents and children pause together for guided questions built around kindness and courage.",
+          "A featured live reading and launch reveal bring the book to life for children, parents, and invited supporters.",
       },
       {
-        label: "Creative close",
+        label: "Closing connection time",
         detail:
-          "The evening ends with a short creative prompt children can continue after they leave.",
+          "The event closes with time for photos, conversation, and a gentle finish that keeps the story energy going beyond the venue.",
       },
     ],
     logistics: [
       {
         label: "Arrival window",
-        value: "Please arrive at least 20-30 minutes before the event begins for check-in.",
+        value:
+          "Please arrive at least 20-30 minutes before the program begins so entry and seating stay smooth.",
       },
       {
         label: "Age guidance",
@@ -280,215 +274,37 @@ export const events = [
       },
       {
         label: "Access note",
-        value: "Tickets are digital-only and tied to the buyer account in the portal.",
+        value:
+          "The event is physical, but tickets remain digital-only and stay tied to the buyer account in the portal.",
       },
     ],
-    ctaLabel: "Reserve digital tickets",
+    ctaLabel: "Get your ticket",
     availabilityNote:
-      "Limited family seating remains for this Johannesburg session.",
+      "This is the only live Zangi event open right now, with limited seating for the Mulungushi launch in Lusaka.",
+    defaultTicketType: "standard",
+    ticketTypes: [
+      {
+        id: "standard",
+        label: "Standard",
+        price: 350 / 28,
+        delivery:
+          "Digital event pass delivered instantly to the portal after checkout, with a QR placeholder for venue entry.",
+      },
+      {
+        id: "vip",
+        label: "VIP",
+        price: 500 / 28,
+        delivery:
+          "VIP digital event pass delivered instantly to the portal after checkout, with a QR placeholder for venue entry.",
+      },
+    ],
     standardTicket: {
-      label: "Standard Digital Ticket",
-      price: 18,
+      label: "Standard",
+      price: 350 / 28,
       delivery:
-        "Digital ticket pass delivered instantly to the portal after checkout, with a QR placeholder for entry.",
+        "Digital event pass delivered instantly to the portal after checkout, with a QR placeholder for venue entry.",
     },
     status: "upcoming",
-  },
-  {
-    id: "virtual-reading-circle",
-    slug: "flag-of-kindness-virtual-reading-circle",
-    title: "Flag of Kindness Virtual Reading Circle",
-    subtitle: "A live online Zangi reading session for families joining from anywhere.",
-    excerpt:
-      "A digital-first event with reading, discussion, and a warm portal-ready ticket pass for remote families.",
-    description:
-      "Designed for families and classrooms that want the Zangi experience without travel, this live online session combines storytelling, visual worldbuilding, and practical discussion prompts that can continue after the stream ends.",
-    startDate: "2026-06-06",
-    dateLabel: "June 6, 2026",
-    timeLabel: "11:00 AM - 12:00 PM SAST",
-    locationLabel: "Live online event",
-    mode: "online",
-    image:
-      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHx2aXJ0dWFsJTIwZXZlbnR8ZW58MHx8fHwxNzk0NjkzODg1fDA&ixlib=rb-4.1.0&q=85",
-    heroTheme: {
-      primary: "rgba(15,23,42,0.9)",
-      secondary: "rgba(29,78,216,0.72)",
-      accent: "#93c5fd",
-      surface: "#eff6ff",
-    },
-    audienceLabel: "Remote families",
-    audience: "Families, homeschool groups, and classrooms wanting a digital Zangi event experience.",
-    highlights: [
-      "Live online storytelling session",
-      "Question prompts for parents and educators",
-      "Portal-based digital ticketing and event access flow",
-    ],
-    familyExperience: [
-      {
-        title: "A live digital reading room",
-        description:
-          "Families join from anywhere and still get a guided, premium storytelling moment instead of a flat webinar format.",
-      },
-      {
-        title: "Easy parent participation",
-        description:
-          "Adults receive prompts they can use during and after the event to keep the story discussion alive.",
-      },
-      {
-        title: "Portal-connected access",
-        description:
-          "The ticket and event reminder live in the portal, keeping the experience organized and easy to revisit.",
-      },
-    ],
-    whoItsFor: [
-      "Families joining from outside the main event cities",
-      "Homeschool and learning groups needing a digital-first option",
-      "Classrooms that want live story energy without travel",
-    ],
-    scheduleItems: [
-      {
-        label: "Digital check-in",
-        detail:
-          "Attendees open the event through their digital ticket flow and settle in before the story begins.",
-      },
-      {
-        label: "Live reading session",
-        detail:
-          "A guided online Zangi reading anchors the event with visuals, warmth, and interactive storytelling.",
-      },
-      {
-        label: "Parent and educator prompts",
-        detail:
-          "Moderated questions help adults extend the event into learning conversations after the session.",
-      },
-      {
-        label: "Closing reminders",
-        detail:
-          "Families leave with follow-up notes and their portal ticket record still available for reference.",
-      },
-    ],
-    logistics: [
-      {
-        label: "Access",
-        value: "The event is joined digitally through the ticket flow described in the portal-ready pass.",
-      },
-      {
-        label: "Recommended setup",
-        value: "A tablet, laptop, or shared screen works best for family participation.",
-      },
-      {
-        label: "Digital delivery",
-        value: "Tickets remain digital-only and continue to live inside the buyer portal after checkout.",
-      },
-    ],
-    ctaLabel: "Book online access",
-    availabilityNote:
-      "This online session is open and designed for flexible family attendance.",
-    standardTicket: {
-      label: "Standard Digital Ticket",
-      price: 12.5,
-      delivery:
-        "Digital event pass delivered to the portal with a QR placeholder and joining reminder details.",
-    },
-    status: "upcoming",
-  },
-  {
-    id: "schools-story-lab",
-    slug: "schools-storytelling-lab-cape-town",
-    title: "Schools Storytelling Lab",
-    subtitle: "A school-focused Zangi event for educators shaping story-led learning moments.",
-    excerpt:
-      "A premium hybrid event for schools exploring reading, culture-rich discussion, and classroom storytelling.",
-    description:
-      "This event is designed for school buyers and literacy leaders who want to translate the Zangi story world into practical classroom experiences. It blends a live story session with educator-facing framing for reading culture and child engagement.",
-    startDate: "2026-07-18",
-    dateLabel: "July 18, 2026",
-    timeLabel: "9:30 AM - 12:00 PM SAST",
-    locationLabel: "Cape Town Arts Forum + livestream access",
-    mode: "hybrid",
-    image:
-      "https://images.unsplash.com/photo-1515169067868-5387ec356754?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHx3b3Jrc2hvcCUyMGV2ZW50fGVufDB8fHx8MTc5NDY5MzkyNHww&ixlib=rb-4.1.0&q=85",
-    heroTheme: {
-      primary: "rgba(30,41,59,0.9)",
-      secondary: "rgba(15,118,110,0.76)",
-      accent: "#99f6e4",
-      surface: "#f0fdfa",
-    },
-    audienceLabel: "School leaders",
-    audience: "Schools, literacy coordinators, and educator teams interested in guided event programming.",
-    highlights: [
-      "A Zangi story session adapted for school contexts",
-      "Discussion framing for reading leaders and educators",
-      "Hybrid attendance supported by digital ticket delivery",
-    ],
-    familyExperience: [
-      {
-        title: "A premium learning event",
-        description:
-          "Schools experience the Zangi world as a serious reading and culture moment, not a disposable promo session.",
-      },
-      {
-        title: "Story plus classroom framing",
-        description:
-          "The event pairs live storytelling with practical language school teams can use in classrooms and assemblies.",
-      },
-      {
-        title: "Hybrid flexibility",
-        description:
-          "In-person and livestream access make it easier for teams to attend in the way that fits their schedule.",
-      },
-    ],
-    whoItsFor: [
-      "Principals and literacy coordinators planning richer reading culture",
-      "Teacher teams looking for classroom-ready story inspiration",
-      "Schools wanting a premium hybrid event experience",
-    ],
-    scheduleItems: [
-      {
-        label: "School welcome session",
-        detail:
-          "Guests arrive, settle in, and receive framing for the event’s learning and story goals.",
-      },
-      {
-        label: "Featured Zangi experience",
-        detail:
-          "The core story presentation models how the world of Zangi can feel live, emotional, and culturally rich.",
-      },
-      {
-        label: "Educator translation",
-        detail:
-          "School leaders receive practical prompts for extending the experience into reading culture and discussion.",
-      },
-      {
-        label: "Hybrid close",
-        detail:
-          "The event closes with reminders, next-step notes, and digital ticket continuity inside the portal.",
-      },
-    ],
-    logistics: [
-      {
-        label: "Format",
-        value: "Hybrid attendance supports both on-site guests and livestream participants.",
-      },
-      {
-        label: "Buyer note",
-        value: "Corporate or school buyers keep ticket visibility within their own portal account.",
-      },
-      {
-        label: "Status",
-        value: "This session is currently sold out, but the event page remains live as a reference experience.",
-      },
-    ],
-    ctaLabel: "Join the next school session",
-    availabilityNote:
-      "This Cape Town session is sold out. Watch for the next school-focused Zangi event.",
-    standardTicket: {
-      label: "Standard Digital Ticket",
-      price: 24,
-      delivery:
-        "Digital event pass issued through the portal with event details and QR placeholder access.",
-    },
-    status: "sold-out",
   },
 ];
 
@@ -627,9 +443,9 @@ export const authorProfile = {
 };
 
 export const contactDetails = {
-  email: "hello@zangi.world",
-  phone: "+27 10 555 0147",
-  address: "Zangi Creative Studio, Johannesburg, South Africa",
+  email: "hello@zangisworld.com",
+  phone: "+260 0972931526",
+  address: "Zangi Creative Studio, Lusaka, Zambia",
   responseTime: "We aim to respond within 2 business days.",
 };
 
@@ -699,12 +515,12 @@ export const portalUsers = [
       {
         id: "ZT-4021",
         purchaseType: "event-ticket",
-        eventSlug: "flag-of-kindness-virtual-reading-circle",
-        eventTitle: "Flag of Kindness Virtual Reading Circle",
-        startDate: "2026-06-06",
-        dateLabel: "June 6, 2026",
-        timeLabel: "11:00 AM - 12:00 PM SAST",
-        locationLabel: "Live online event",
+        eventSlug: "zangi-book-launch-mulungushi-lusaka",
+        eventTitle: "Zangi's Flag Book Launch",
+        startDate: "2026-05-22",
+        dateLabel: "May 22, 2026",
+        timeLabel: "6:00 PM - 7:30 PM CAT",
+        locationLabel: "Mulungushi International Conference Centre, Lusaka",
         buyerType: "individual",
         buyerName: "Nia Mokoena",
         email: "nia@example.com",
@@ -712,8 +528,8 @@ export const portalUsers = [
         organizationName: "",
         ticketHolderName: "Nia Mokoena",
         quantity: 1,
-        unitPrice: 12.5,
-        total: 12.5,
+        unitPrice: 18,
+        total: 18,
         status: "Ticket Ready",
         ticketCode: "PASS-94NKQ3",
         createdAt: "2026-03-13",
@@ -764,12 +580,12 @@ export const portalUsers = [
       {
         id: "ZT-5178",
         purchaseType: "event-ticket",
-        eventSlug: "kindness-story-evening-johannesburg",
-        eventTitle: "Zangi Kindness Story Evening",
+        eventSlug: "zangi-book-launch-mulungushi-lusaka",
+        eventTitle: "Zangi's Flag Book Launch",
         startDate: "2026-05-22",
         dateLabel: "May 22, 2026",
-        timeLabel: "6:00 PM - 7:30 PM SAST",
-        locationLabel: "The Guild Hall, Rosebank, Johannesburg",
+        timeLabel: "6:00 PM - 7:30 PM CAT",
+        locationLabel: "Mulungushi International Conference Centre, Lusaka",
         buyerType: "corporate",
         buyerName: "Lebo Naidoo",
         email: "library@learningbridge.org",

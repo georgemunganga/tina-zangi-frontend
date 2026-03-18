@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight, Mail } from "lucide-react";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
 const FinalCTA = () => {
   const [email, setEmail] = useState("");
@@ -19,83 +20,53 @@ const FinalCTA = () => {
   };
 
   return (
-    <section
-      className="relative overflow-hidden py-20 sm:py-28"
-      style={{
-        background: "linear-gradient(135deg, #7c2d12 0%, #c2410c 100%)",
-      }}
-    >
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute left-10 top-10 h-64 w-64 rounded-full bg-white blur-3xl" />
-        <div className="absolute bottom-10 right-10 h-96 w-96 rounded-full bg-white blur-3xl" />
-      </div>
-
-      <div className="site-shell relative">
-        <div className="mx-auto max-w-5xl text-center">
-          <h2
-            className="mb-6 text-7xl font-bold leading-none text-white sm:text-8xl md:text-9xl lg:text-[120px]"
-            style={{
-              fontFamily: "'ADVENTURES', sans-serif",
-              textShadow: "6px 6px 12px rgba(0,0,0,0.5)",
-              letterSpacing: "0.02em",
-            }}
-          >
-            Ready to choose your next format?
-          </h2>
-
-          <p className="mx-auto mb-12 max-w-3xl text-xl leading-relaxed text-white/90 sm:text-2xl">
-            Browse the books, pick digital or hardcopy, and keep every order in
-            one place through the Zangi portal.
-          </p>
-
-          <div className="mb-16 flex flex-col items-center justify-center gap-6 sm:flex-row">
-            <Link
-              to="/shop"
-              className="group inline-flex items-center gap-3 rounded-full bg-white px-10 py-5 text-lg font-bold transition-all duration-300 hover:scale-110 hover:shadow-2xl"
-              style={{ color: "#7c2d12" }}
-            >
-              <span>Open the shop</span>
-              <ChevronRight
-                size={24}
-                className="transition-transform duration-300 group-hover:translate-x-2"
-              />
-            </Link>
-
-            <Link
-              to="/portal/login"
-              className="group inline-flex items-center gap-3 rounded-full border-2 border-white bg-transparent px-10 py-5 text-lg font-bold text-white transition-all duration-300 hover:scale-105 hover:bg-white hover:shadow-2xl"
-              onMouseEnter={(event) => {
-                event.currentTarget.style.color = "#7c2d12";
-              }}
-              onMouseLeave={(event) => {
-                event.currentTarget.style.color = "#fff";
-              }}
-            >
-              <span>Visit the portal</span>
-            </Link>
-          </div>
-
-          <div className="mx-auto max-w-xl">
-            <div className="rounded-2xl border border-white/20 bg-white/10 p-8 backdrop-blur-md">
-              <h3
-                className="mb-3 text-2xl font-bold text-white"
-                style={{ fontFamily: "'Agu Display', serif" }}
+    <section className="bg-[linear-gradient(180deg,#ffffff_0%,#fffaf5_100%)] py-20 sm:py-28">
+      <div className="site-shell">
+        <div className="overflow-hidden rounded-[2.5rem] bg-[linear-gradient(135deg,#7c2d12_0%,#c2410c_100%)] p-8 text-white shadow-[0_30px_90px_rgba(124,45,18,0.22)] sm:p-10 lg:p-12">
+          <div className="grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+            <div className="max-w-2xl">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-white/68">
+                Next step
+              </p>
+              <h2
+                className="mt-4 text-5xl font-bold leading-none sm:text-6xl lg:text-[4.5rem]"
+                style={{ fontFamily: "'ADVENTURES', sans-serif" }}
               >
-                Join the Adventure
-              </h3>
-              <p className="mb-6 text-white/80">
-                Subscribe to hear about new titles, learning ideas, and format
-                releases.
+                Choose how you want to read Zangi.
+              </h2>
+              <p className="mt-6 text-lg leading-8 text-white/84">
+                Browse the books, pick digital or hardcopy, and keep your orders
+                in one place through the portal.
               </p>
 
-              <form
-                onSubmit={handleNewsletterSubmit}
-                className="flex flex-col gap-3 sm:flex-row"
-              >
-                <div className="relative flex-1">
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Button asChild variant="brandSecondary" size="pillLg">
+                  <Link to="/shop">
+                    <span>Open the shop</span>
+                    <ChevronRight size={18} />
+                  </Link>
+                </Button>
+
+                <Button asChild variant="brandGhost" size="pillLg" className="border-white">
+                  <Link to="/portal/login">
+                    <span>Visit the portal</span>
+                  </Link>
+                </Button>
+              </div>
+            </div>
+
+            <div className="rounded-[2rem] border border-white/14 bg-white/10 p-7 backdrop-blur-md sm:p-8">
+              <h3 className="text-2xl font-semibold text-white">Join the adventure</h3>
+              <p className="mt-3 text-base leading-7 text-white/78">
+                Subscribe for new titles, launch news, and learning ideas from
+                the Zangi world.
+              </p>
+
+              <form onSubmit={handleNewsletterSubmit} className="mt-6 grid gap-3">
+                <label className="relative block">
                   <Mail
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                    size={20}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                    size={18}
                   />
                   <input
                     type="email"
@@ -103,20 +74,19 @@ const FinalCTA = () => {
                     onChange={(event) => setEmail(event.target.value)}
                     placeholder="Enter your email"
                     required
-                    className="w-full rounded-full py-4 pl-12 pr-4 text-gray-800 transition-all focus:outline-none focus:ring-4 focus:ring-white/30"
+                    className="h-12 w-full rounded-full border border-white/20 bg-white px-12 pr-4 text-slate-900 outline-none transition focus:border-white/60 focus:ring-4 focus:ring-white/20"
                   />
-                </div>
-                <button
+                </label>
+
+                <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="rounded-full px-8 py-4 font-bold transition-all duration-300 hover:scale-105 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
-                  style={{
-                    backgroundColor: "#0f766e",
-                    color: "#fff",
-                  }}
+                  variant="brandSecondary"
+                  size="pillLg"
+                  className="justify-center"
                 >
                   {isSubmitting ? "Subscribing..." : "Subscribe"}
-                </button>
+                </Button>
               </form>
             </div>
           </div>

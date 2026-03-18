@@ -114,25 +114,25 @@ export const CommerceProvider = ({ children }) => {
   const countryCode = useMemo(() => detectCountryCode(), []);
   const isZambian = countryCode === "ZM";
   const currencyCode = isZambian ? SITE_CURRENCY_CODE : "USD";
-  const checkoutLocale = getCurrencyLocale(currencyCode, browserLocale);
-  const paymentOptions = useMemo(
-    () => getPaymentOptionsByCountry(countryCode),
-    [countryCode],
-  );
-
   const value = useMemo(() => {
-    const convertFromUsd = (amount) =>
-      roundCurrencyAmount(convertAmount(amount, "USD", currencyCode));
+    const convertFromUsdToCurrency = (amount, targetCurrency = currencyCode) =>
+      roundCurrencyAmount(convertAmount(amount, "USD", targetCurrency));
 
-    const formatFromUsd = (amount) =>
+    const formatFromUsdToCurrency = (amount, targetCurrency = currencyCode) =>
       formatCurrency(
-        roundCurrencyAmount(convertAmount(amount, "USD", SITE_CURRENCY_CODE)),
-        SITE_CURRENCY_CODE,
-        SITE_LOCALE,
+        convertFromUsdToCurrency(amount, targetCurrency),
+        targetCurrency,
+        getCurrencyLocale(targetCurrency, browserLocale),
       );
 
+    const convertFromUsd = (amount) =>
+      convertFromUsdToCurrency(amount, currencyCode);
+
+    const formatFromUsd = (amount) =>
+      formatFromUsdToCurrency(amount, SITE_CURRENCY_CODE);
+
     const formatCheckoutFromUsd = (amount) =>
-      formatCurrency(convertFromUsd(amount), currencyCode, checkoutLocale);
+      formatFromUsdToCurrency(amount, currencyCode);
 
     const formatStoredAmount = (amount, amountCurrency = "USD") =>
       formatCurrency(
@@ -147,19 +147,27 @@ export const CommerceProvider = ({ children }) => {
       isZambian,
       currencyCode,
       siteCurrencyCode: SITE_CURRENCY_CODE,
-      paymentOptions,
+      getCheckoutPaymentOptions({ purchaseType, formatType }) {
+        return getPaymentOptionsByCountry({
+          isZambian,
+          purchaseType,
+          formatType,
+        });
+      },
       convertFromUsd,
+      convertFromUsdToCurrency,
       formatFromUsd,
+      formatFromUsdToCurrency,
       formatCheckoutFromUsd,
       formatStoredAmount,
       checkoutNotice: isZambian
-        ? "Checkout is shown in Zambian Kwacha. Available payment methods are Mobile Money and ATM Card."
-        : "You appear to be outside Zambia. Site prices remain in Zambian Kwacha, but checkout switches to USD. Available payment methods are Visa and Mastercard.",
+        ? "Choose Mobile Money or Card to complete checkout in Zambian Kwacha."
+        : "Checkout switches to USD for international buyers and uses Card for online payment.",
       pricingNotice: isZambian
         ? "Prices are displayed in Zambian Kwacha."
         : "Prices are displayed in Zambian Kwacha. Checkout switches to USD for international payments.",
     };
-  }, [browserLocale, checkoutLocale, countryCode, currencyCode, isZambian, paymentOptions]);
+  }, [browserLocale, countryCode, currencyCode, isZambian]);
 
   return (
     <CommerceContext.Provider value={value}>

@@ -1,6 +1,11 @@
 const ORDERS_KEY = "zangi-portal-orders";
 const TICKETS_KEY = "zangi-portal-tickets";
 const SESSION_KEY = "zangi-portal-session";
+const ACCOUNTS_KEY = "zangi-portal-accounts";
+const OTP_CHALLENGES_KEY = "zangi-portal-otp-challenges";
+const AUTH_STATE_KEY = "zangi-portal-auth-state";
+export const PORTAL_SESSION_EVENT = "zangi-portal-session-change";
+export const MOCK_PORTAL_OTP_CODE = "123456";
 
 function readJson(key, fallback) {
   if (typeof window === "undefined") {
@@ -23,6 +28,18 @@ function writeJson(key, value) {
   window.localStorage.setItem(key, JSON.stringify(value));
 }
 
+function emitSessionChange() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.dispatchEvent(new CustomEvent(PORTAL_SESSION_EVENT));
+}
+
+export function normalizePortalEmail(email) {
+  return String(email || "").trim().toLowerCase();
+}
+
 export function getStoredOrders() {
   return readJson(ORDERS_KEY, []);
 }
@@ -42,11 +59,13 @@ export function addStoredTicketPurchase(ticketPurchase) {
 }
 
 export function getPortalSession() {
-  return readJson(SESSION_KEY, null);
+  const authState = readJson(AUTH_STATE_KEY, null);
+  return authState?.session || readJson(SESSION_KEY, null);
 }
 
 export function setPortalSession(session) {
   writeJson(SESSION_KEY, session);
+  emitSessionChange();
 }
 
 export function clearPortalSession() {
@@ -55,6 +74,96 @@ export function clearPortalSession() {
   }
 
   window.localStorage.removeItem(SESSION_KEY);
+  emitSessionChange();
+}
+
+export function getPortalAuthState() {
+  return readJson(AUTH_STATE_KEY, null);
+}
+
+export function setPortalAuthState(authState) {
+  writeJson(AUTH_STATE_KEY, authState);
+
+  if (authState?.session) {
+    writeJson(SESSION_KEY, authState.session);
+  } else if (typeof window !== "undefined") {
+    window.localStorage.removeItem(SESSION_KEY);
+  }
+
+  emitSessionChange();
+}
+
+export function clearPortalAuthState() {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.removeItem(AUTH_STATE_KEY);
+  window.localStorage.removeItem(SESSION_KEY);
+  emitSessionChange();
+}
+
+export function getPortalAccounts() {
+  return readJson(ACCOUNTS_KEY, []);
+}
+
+export function findPortalAccountByEmail(email) {
+  const normalizedEmail = normalizePortalEmail(email);
+
+  return getPortalAccounts().find(
+    (account) => normalizePortalEmail(account.email) === normalizedEmail,
+  );
+}
+
+export function savePortalAccount(account) {
+  const normalizedEmail = normalizePortalEmail(account.email);
+  const nextAccount = {
+    ...account,
+    email: normalizedEmail,
+  };
+  const remainingAccounts = getPortalAccounts().filter(
+    (item) => normalizePortalEmail(item.email) !== normalizedEmail,
+  );
+
+  writeJson(ACCOUNTS_KEY, [nextAccount, ...remainingAccounts]);
+  return nextAccount;
+}
+
+export function getPortalOtpChallenges() {
+  return readJson(OTP_CHALLENGES_KEY, []);
+}
+
+export function createPortalOtpChallenge(payload) {
+  const normalizedEmail = normalizePortalEmail(payload.email);
+  const challenge = {
+    email: normalizedEmail,
+    code: MOCK_PORTAL_OTP_CODE,
+    createdAt: new Date().toISOString(),
+    ...payload,
+  };
+  const remainingChallenges = getPortalOtpChallenges().filter(
+    (item) => normalizePortalEmail(item.email) !== normalizedEmail,
+  );
+
+  writeJson(OTP_CHALLENGES_KEY, [challenge, ...remainingChallenges]);
+  return challenge;
+}
+
+export function getPortalOtpChallenge(email) {
+  const normalizedEmail = normalizePortalEmail(email);
+
+  return getPortalOtpChallenges().find(
+    (challenge) => normalizePortalEmail(challenge.email) === normalizedEmail,
+  );
+}
+
+export function clearPortalOtpChallenge(email) {
+  const normalizedEmail = normalizePortalEmail(email);
+  const remainingChallenges = getPortalOtpChallenges().filter(
+    (challenge) => normalizePortalEmail(challenge.email) !== normalizedEmail,
+  );
+
+  writeJson(OTP_CHALLENGES_KEY, remainingChallenges);
 }
 
 export function createMockOrder(payload) {

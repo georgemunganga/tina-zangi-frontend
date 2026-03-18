@@ -4,6 +4,8 @@ import { ArrowRight, Mail, MapPin, Phone } from "lucide-react";
 import { toast } from "sonner";
 import PageHero from "@/components/PageHero";
 import { contactDetails } from "@/data/mock";
+import { Button } from "@/components/ui/button";
+import { submitContactMessage } from "@/lib/api";
 
 const ContactPage = () => {
   const [formState, setFormState] = useState({
@@ -11,11 +13,22 @@ const ContactPage = () => {
     email: "",
     message: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    toast.success("Message received. We will be in touch soon.");
-    setFormState({ name: "", email: "", message: "" });
+
+    setIsSubmitting(true);
+
+    try {
+      await submitContactMessage(formState);
+      toast.success("Message received. We will be in touch soon.");
+      setFormState({ name: "", email: "", message: "" });
+    } catch (error) {
+      toast.error(error.message || "We could not send your message right now.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -24,13 +37,15 @@ const ContactPage = () => {
         eyebrow="Contact"
         title="Talk to the Zangi team."
         description="Use this page for general support, bulk-order questions, school partnerships, or product guidance."
+        backgroundImage="/images/contact.png"
+        backgroundImagePosition="72% center"
       />
 
       <section className="bg-[#fffaf5] pb-6 pt-12">
         <div className="site-shell">
           <div className="grid gap-4 rounded-[2rem] border border-amber-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.05)] md:grid-cols-[1.05fr_0.95fr] md:items-center">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
                 Prefer self-serve help?
               </p>
               <p className="mt-3 text-base leading-7 text-slate-600">
@@ -39,20 +54,18 @@ const ContactPage = () => {
               </p>
             </div>
             <div className="flex flex-wrap gap-3 md:justify-end">
-              <Link
-                to="/help/overview"
-                className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
-              >
-                <span>Open help center</span>
-                <ArrowRight size={16} />
-              </Link>
-              <Link
-                to="/help/contact-support"
-                className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition-transform duration-300 hover:-translate-y-0.5"
-              >
-                <span>Support article</span>
-                <ArrowRight size={16} />
-              </Link>
+              <Button asChild variant="brandDark" size="pill">
+                <Link to="/help/overview">
+                  <span>Open help center</span>
+                  <ArrowRight size={16} />
+                </Link>
+              </Button>
+              <Button asChild variant="brandSecondary" size="pill">
+                <Link to="/help/contact-support">
+                  <span>Support article</span>
+                  <ArrowRight size={16} />
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -60,8 +73,8 @@ const ContactPage = () => {
 
       <section className="bg-white py-20 sm:py-28">
         <div className="site-shell grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="rounded-[2rem] bg-slate-950 p-8 text-white">
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#5eead4]">
+          <div className="rounded-[2rem] bg-black p-8 text-white">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#5eead4]">
               Contact details
             </p>
             <div className="mt-8 space-y-6">
@@ -94,7 +107,7 @@ const ContactPage = () => {
             onSubmit={handleSubmit}
             className="rounded-[2rem] border border-amber-100 bg-[#fffaf5] p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]"
           >
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
               Send a message
             </p>
             <div className="mt-6 grid gap-5">
@@ -103,6 +116,7 @@ const ContactPage = () => {
                 <input
                   type="text"
                   value={formState.name}
+                  disabled={isSubmitting}
                   onChange={(event) =>
                     setFormState((current) => ({
                       ...current,
@@ -118,6 +132,7 @@ const ContactPage = () => {
                 <input
                   type="email"
                   value={formState.email}
+                  disabled={isSubmitting}
                   onChange={(event) =>
                     setFormState((current) => ({
                       ...current,
@@ -132,6 +147,7 @@ const ContactPage = () => {
                 <span className="text-sm font-medium text-slate-700">Message</span>
                 <textarea
                   value={formState.message}
+                  disabled={isSubmitting}
                   onChange={(event) =>
                     setFormState((current) => ({
                       ...current,
@@ -145,12 +161,15 @@ const ContactPage = () => {
               </label>
             </div>
 
-            <button
+            <Button
               type="submit"
-              className="mt-6 inline-flex rounded-full bg-[#c2410c] px-6 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
+              variant="brand"
+              size="pill"
+              className="mt-6"
+              disabled={isSubmitting}
             >
-              Send message
-            </button>
+              {isSubmitting ? "Sending..." : "Send message"}
+            </Button>
           </form>
         </div>
       </section>

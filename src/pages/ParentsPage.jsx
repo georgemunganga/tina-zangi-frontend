@@ -7,8 +7,7 @@ const ParentsPage = () => {
     <div>
       <PageHero
         eyebrow="Parents"
-        title="A calmer, more confident way to say yes to the story."
-        description="This page is designed to help parents, schools, and educators quickly understand why Zangi is valuable, how it supports children, and what kind of experience the books are built to deliver."
+        title="Resources for your child."
         actions={[
           { label: "Shop now", to: "/shop", variant: "solid" },
           { label: "Contact us", to: "/contact", variant: "outline" },
@@ -23,7 +22,7 @@ const ParentsPage = () => {
                 key={section.title}
                 className="rounded-[2rem] border border-amber-100 bg-[#fffaf5] p-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)]"
               >
-                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
                   Parent lens
                 </p>
                 <h2 className="mt-4 text-3xl font-semibold text-[#7c2d12]">
@@ -37,8 +36,8 @@ const ParentsPage = () => {
           </div>
 
           <div className="mt-16 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-            <div className="rounded-[2rem] bg-slate-950 p-8 text-white">
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#5eead4]">
+            <div className="rounded-[2rem] bg-black p-8 text-white">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#5eead4]">
                 Frequently asked
               </p>
               <div className="mt-6 space-y-5">
@@ -54,7 +53,7 @@ const ParentsPage = () => {
             </div>
 
             <div className="rounded-[2rem] border border-amber-100 bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
                 Parent reflections
               </p>
               <div className="mt-6 space-y-5">

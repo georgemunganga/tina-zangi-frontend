@@ -31,7 +31,7 @@ main {
 /* Shared page gutter for consistent left/right spacing */
 .site-shell {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1240px;
   margin: 0 auto;
   padding-inline: 1.5rem;
 }

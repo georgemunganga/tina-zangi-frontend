@@ -30,7 +30,7 @@ const BooksPage = () => {
 
           <div className="mt-16 grid gap-6 md:grid-cols-2">
             <article className="rounded-[2rem] bg-[#fff7ed] p-8">
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
                 Digital
               </p>
               <h3 className="mt-4 text-3xl font-semibold text-[#7c2d12]">
@@ -43,8 +43,8 @@ const BooksPage = () => {
               </p>
             </article>
 
-            <article className="rounded-[2rem] bg-slate-950 p-8 text-white">
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#5eead4]">
+            <article className="rounded-[2rem] bg-black p-8 text-white">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#5eead4]">
                 Hardcopy
               </p>
               <h3 className="mt-4 text-3xl font-semibold">

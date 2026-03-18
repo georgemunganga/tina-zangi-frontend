@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from "react";
 import "@/App.css";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { Toaster } from "@/components/ui/sonner";
 
 const PublicLayout = lazy(() => import("@/components/PublicLayout"));
@@ -20,12 +21,24 @@ const ContactPage = lazy(() => import("@/pages/ContactPage"));
 const SupportCenterLayout = lazy(() => import("@/components/SupportCenterLayout"));
 const SupportArticlePage = lazy(() => import("@/pages/SupportArticlePage"));
 const PortalLoginPage = lazy(() => import("@/pages/PortalLoginPage"));
-const PortalDashboardPage = lazy(() => import("@/pages/PortalDashboardPage"));
+const PortalSignupPage = lazy(() => import("@/pages/PortalSignupPage"));
+const PortalVerifyOtpPage = lazy(() => import("@/pages/PortalVerifyOtpPage"));
+const PortalLayout = lazy(() => import("@/pages/dashboard/PortalLayout"));
+const PortalIndexRedirect = lazy(() =>
+  import("@/pages/dashboard/PortalIndexRedirect"),
+);
+const PortalOverviewPage = lazy(() =>
+  import("@/pages/dashboard/PortalOverviewPage"),
+);
+const PortalOrdersPage = lazy(() => import("@/pages/dashboard/PortalOrdersPage"));
+const PortalTicketsPage = lazy(() =>
+  import("@/pages/dashboard/PortalTicketsPage"),
+);
 
 const RouteFallback = () => (
   <div className="flex min-h-screen items-center justify-center bg-[linear-gradient(180deg,#ffffff_0%,#fef9f3_100%)] px-6 text-center">
     <div className="rounded-[2rem] border border-amber-100 bg-white px-8 py-10 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
-      <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+      <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
         Loading
       </p>
       <h2
@@ -69,7 +82,21 @@ function App() {
               <Route path="*" element={<Navigate to="overview" replace />} />
             </Route>
             <Route path="/portal/login" element={<PortalLoginPage />} />
-            <Route path="/portal" element={<PortalDashboardPage />} />
+            <Route path="/portal/signup" element={<PortalSignupPage />} />
+            <Route path="/portal/verify-otp" element={<PortalVerifyOtpPage />} />
+            <Route
+              path="/portal"
+              element={
+                <ProtectedRoute>
+                  <PortalLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<PortalIndexRedirect />} />
+              <Route path="overview" element={<PortalOverviewPage />} />
+              <Route path="orders" element={<PortalOrdersPage />} />
+              <Route path="tickets" element={<PortalTicketsPage />} />
+            </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>

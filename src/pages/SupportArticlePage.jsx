@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { getSupportArticle, supportSections } from "@/data/support";
 
 const calloutToneMap = {
@@ -69,17 +70,17 @@ const SupportArticlePage = () => {
       <section className="overflow-hidden rounded-[2.5rem] border border-slate-200 bg-white shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
         <div className="bg-[linear-gradient(135deg,#fff7ed_0%,#ffffff_48%,#ecfeff_100%)] p-8 sm:p-10">
           <div className="flex flex-wrap gap-3">
-            <span className="rounded-full bg-[#fff7ed] px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#9a3412]">
+            <span className="rounded-full bg-[#fff7ed] px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#9a3412]">
               {article.eyebrow}
             </span>
             {section ? (
-              <span className="rounded-full bg-[#ecfeff] px-4 py-2 text-xs font-semibold uppercase tracking-[0.24em] text-[#0f766e]">
+              <span className="rounded-full bg-[#ecfeff] px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-[#0f766e]">
                 {section.title}
               </span>
             ) : null}
           </div>
 
-          <h1 className="mt-6 text-4xl font-semibold leading-tight text-slate-950 sm:text-5xl">
+          <h1 className="mt-6 text-4xl font-semibold leading-tight text-black sm:text-5xl">
             {article.title}
           </h1>
           <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600 sm:text-lg">
@@ -115,10 +116,10 @@ const SupportArticlePage = () => {
           {article.content.map((block) => (
             <section key={block.title} className="space-y-5">
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
                   Section
                 </p>
-                <h2 className="mt-3 text-3xl font-semibold text-slate-950">
+                <h2 className="mt-3 text-3xl font-semibold text-black">
                   {block.title}
                 </h2>
               </div>
@@ -154,7 +155,7 @@ const SupportArticlePage = () => {
                       <Icon className={`mt-1 ${tone.eyebrow}`} size={18} />
                       <div>
                         <p
-                          className={`text-sm font-semibold uppercase tracking-[0.24em] ${tone.eyebrow}`}
+                          className={`text-sm font-semibold uppercase tracking-[0.12em] ${tone.eyebrow}`}
                         >
                           Note
                         </p>
@@ -176,10 +177,10 @@ const SupportArticlePage = () => {
 
       {article.faqs?.length ? (
         <section className="rounded-[2.5rem] border border-slate-200 bg-white p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)] sm:p-10">
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
             Questions
           </p>
-          <h2 className="mt-4 text-3xl font-semibold text-slate-950">
+          <h2 className="mt-4 text-3xl font-semibold text-black">
             Frequently asked questions
           </h2>
 
@@ -204,7 +205,7 @@ const SupportArticlePage = () => {
 
       {article.resources?.length ? (
         <section className="rounded-[2.5rem] border border-slate-200 bg-white p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)] sm:p-10">
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
             Support details
           </p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
@@ -213,7 +214,7 @@ const SupportArticlePage = () => {
                 key={`${resource.label}-${resource.value}`}
                 className="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
                   {resource.label}
                 </p>
                 {resource.href ? (
@@ -238,13 +239,12 @@ const SupportArticlePage = () => {
 
           {article.cta ? (
             <div className="mt-8">
-              <Link
-                to={article.cta.to}
-                className="inline-flex items-center gap-2 rounded-full bg-[#c2410c] px-6 py-3 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
-              >
-                <span>{article.cta.label}</span>
-                <ArrowRight size={16} />
-              </Link>
+              <Button asChild variant="brand" size="pill">
+                <Link to={article.cta.to}>
+                  <span>{article.cta.label}</span>
+                  <ArrowRight size={16} />
+                </Link>
+              </Button>
             </div>
           ) : null}
         </section>
@@ -252,7 +252,7 @@ const SupportArticlePage = () => {
 
       {relatedArticles.length ? (
         <section className="rounded-[2.5rem] border border-slate-200 bg-white p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)] sm:p-10">
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
             Related articles
           </p>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
@@ -262,7 +262,7 @@ const SupportArticlePage = () => {
                 to={`/help/${relatedArticle.slug}`}
                 className="rounded-[1.75rem] border border-slate-200 bg-slate-50 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#fdba74] hover:bg-white"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-slate-400">
+                <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
                   {
                     supportSections.find(
                       (item) => item.id === relatedArticle.sectionId,

@@ -24,7 +24,7 @@ const AboutAuthorPage = () => {
           </div>
 
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
               {authorProfile.name}
             </p>
             <h2 className="mt-4 text-4xl font-semibold leading-tight text-[#7c2d12] sm:text-5xl">

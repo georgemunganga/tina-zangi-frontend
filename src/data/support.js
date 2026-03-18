@@ -28,7 +28,7 @@ const extendedFaqItems = [
   {
     question: "Which currency will I see during checkout?",
     answer:
-      "Site pricing is presented in Zambian Kwacha. During checkout, visitors in Zambia pay in Kwacha, while international visitors are guided to pay in USD with the supported card methods shown for that region.",
+      "Site pricing is presented in Zambian Kwacha. During checkout, visitors in Zambia pay in Kwacha, while international visitors are guided to pay in USD and use Card for online payment.",
   },
   {
     question: "Are event tickets physical or digital?",
@@ -104,14 +104,14 @@ export const supportArticles = [
     eyebrow: "Payments",
     title: "How pricing, currencies, and payment methods work on Zangi.",
     description:
-      "This guide explains the site-wide Kwacha pricing display, the region-aware checkout currency, and the supported payment methods shown at checkout.",
+      "This guide explains the site-wide Kwacha pricing display, the region-aware checkout currency, secure online payment flow, and when hardcopy orders can use payment on delivery.",
     readingTime: "5 min read",
     updatedLabel: "Updated March 2026",
-    highlights: [
-      "Site pricing is shown in Zambian Kwacha.",
-      "Checkout keeps Zambia in Kwacha and switches international buyers to USD.",
-      "Payment methods change based on the buyer's detected region.",
-    ],
+      highlights: [
+        "Site pricing is shown in Zambian Kwacha.",
+        "Checkout keeps Zambia in Kwacha and switches international buyers to USD.",
+        "Payment methods change based on region, purchase type, and format.",
+      ],
     content: [
       {
         title: "Pricing display",
@@ -126,15 +126,15 @@ export const supportArticles = [
           "The payment options shown at checkout depend on where the buyer appears to be located.",
         ],
         bullets: [
-          "Zambia: Mobile Money and ATM Card in ZMW.",
-          "Outside Zambia: Visa and Mastercard in USD.",
-          "The available method list is shown before submission inside the checkout form itself.",
+          "Zambia online checkout uses Mobile Money or Card in a secure Lenco payment window.",
+          "International checkout uses Card and shows USD totals.",
+          "Payment on Delivery is available only for Zambia hardcopy book orders.",
         ],
       },
       {
         title: "What buyers should prepare",
         paragraphs: [
-          "Buyers should be ready to provide the contact details tied to the purchase and the correct payment details for the method shown in checkout.",
+          "Buyers should be ready to provide the contact details tied to the purchase and then complete online payment in the secure Lenco window when required.",
         ],
         bullets: [
           "Book checkout supports individual, corporate, and wholesale buyer types.",
@@ -290,8 +290,8 @@ export const supportArticles = [
         ],
         bullets: [
           "Choose buyer type: individual or corporate.",
-          "Enter buyer details, quantity, and optional ticket holder name.",
-          "Submit payment details using the methods available for the buyer region.",
+          "Enter buyer details and quantity.",
+          "Complete payment in the secure Lenco window using the methods available for the buyer region.",
         ],
       },
       {

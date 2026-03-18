@@ -46,7 +46,7 @@ const SupportNavigation = ({ onNavigate }) => (
               <Icon size={18} />
             </div>
             <div>
-              <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-500">
+              <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-slate-500">
                 {section.title}
               </h3>
               <p className="mt-1 text-sm leading-6 text-slate-500">
@@ -111,6 +111,15 @@ const SupportCenterLayout = () => {
               >
                 <div className="h-full overflow-y-auto p-6">
                   <SheetHeader className="text-left">
+                    <Link to="/" className="mb-5 inline-flex w-fit" onClick={() => setMobileNavOpen(false)}>
+                      <img
+                        src="/images/logo-Zangi.svg"
+                        alt="Zangi"
+                        className="h-12 w-auto"
+                        loading="eager"
+                        decoding="async"
+                      />
+                    </Link>
                     <SheetTitle className="text-2xl font-semibold text-slate-900">
                       Support Center
                     </SheetTitle>
@@ -129,14 +138,20 @@ const SupportCenterLayout = () => {
 
             <Link
               to="/"
-              className="text-3xl font-bold tracking-tight text-[#7c2d12]"
-              style={{ fontFamily: "'ADVENTURES', sans-serif" }}
+              className="inline-flex transition-all duration-300 hover:scale-[1.02]"
+              aria-label="Zangi home"
             >
-              ZANGI
+              <img
+                src="/images/logo-Zangi.svg"
+                alt="Zangi"
+                className="h-12 w-auto sm:h-14"
+                loading="eager"
+                decoding="async"
+              />
             </Link>
 
             <div className="hidden sm:block">
-              <p className="text-xs font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
                 Support Center
               </p>
               <p className="text-sm text-slate-500">
@@ -146,19 +161,15 @@ const SupportCenterLayout = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              to="/contact"
-              className="hidden rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 transition-transform duration-300 hover:-translate-y-0.5 sm:inline-flex"
-            >
-              Contact support
-            </Link>
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 rounded-full bg-slate-950 px-4 py-2 text-sm font-semibold text-white transition-transform duration-300 hover:-translate-y-0.5"
-            >
-              <ArrowLeft size={15} />
-              <span>Back to site</span>
-            </Link>
+            <Button asChild variant="brandSecondary" size="pillSm" className="hidden sm:inline-flex">
+              <Link to="/contact">Contact support</Link>
+            </Button>
+            <Button asChild variant="brandDark" size="pillSm">
+              <Link to="/">
+                <ArrowLeft size={15} />
+                <span>Back to site</span>
+              </Link>
+            </Button>
           </div>
         </div>
       </header>
@@ -167,7 +178,7 @@ const SupportCenterLayout = () => {
         <aside className="hidden w-[320px] shrink-0 lg:block">
           <div className="sticky top-24 space-y-6">
             <article className="rounded-[2rem] border border-slate-200 bg-white/90 p-6 shadow-[0_20px_55px_rgba(15,23,42,0.06)]">
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
                 Need direction?
               </p>
               <p className="mt-4 text-sm leading-7 text-slate-600">
@@ -179,7 +190,7 @@ const SupportCenterLayout = () => {
                   <Link
                     key={article.slug}
                     to={`/help/${article.slug}`}
-                    className="rounded-full bg-[#fff7ed] px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#9a3412]"
+                    className="rounded-full bg-[#fff7ed] px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#9a3412]"
                   >
                     {article.title}
                   </Link>
@@ -191,10 +202,10 @@ const SupportCenterLayout = () => {
               <SupportNavigation />
             </article>
 
-            <article className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-[0_24px_70px_rgba(15,23,42,0.14)]">
+            <article className="rounded-[2rem] bg-black p-6 text-white shadow-[0_24px_70px_rgba(15,23,42,0.14)]">
               <div className="flex items-center gap-3">
                 <LifeBuoy className="text-[#5eead4]" size={18} />
-                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#5eead4]">
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#5eead4]">
                   Direct support
                 </p>
               </div>

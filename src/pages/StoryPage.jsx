@@ -5,6 +5,7 @@ import PageHero from "@/components/PageHero";
 import MeetZangi from "@/components/MeetZangi";
 import StoryWorld from "@/components/StoryWorld";
 import { storyWorld } from "@/data/mock";
+import { Button } from "@/components/ui/button";
 
 const StoryPage = () => {
   return (
@@ -24,7 +25,7 @@ const StoryPage = () => {
       <section className="bg-[#fffaf5] py-20 sm:py-28">
         <div className="site-shell">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
               Story pillars
             </p>
             <h2
@@ -41,7 +42,7 @@ const StoryPage = () => {
                 key={theme}
                 className="rounded-[2rem] border border-amber-100 bg-white p-8 shadow-[0_24px_70px_rgba(15,23,42,0.08)]"
               >
-                <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
                   Theme {index + 1}
                 </p>
                 <h3 className="mt-5 text-2xl font-semibold text-[#7c2d12]">
@@ -56,7 +57,7 @@ const StoryPage = () => {
           </div>
 
           <div className="mt-12 rounded-[2rem] bg-[#7c2d12] p-8 text-white shadow-[0_24px_70px_rgba(124,45,18,0.24)] sm:p-10">
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-white/60">
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-white/60">
               From page to purchase
             </p>
             <h3
@@ -70,13 +71,12 @@ const StoryPage = () => {
               hardcopy before checkout, so the purchase flow stays clear and
               intentional.
             </p>
-            <Link
-              to="/shop"
-              className="mt-7 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#7c2d12] transition-transform duration-300 hover:-translate-y-0.5"
-            >
-              <span>Enter the shop</span>
-              <ArrowRight size={16} />
-            </Link>
+            <Button asChild variant="brandSecondary" size="pill" className="mt-7">
+              <Link to="/shop">
+                <span>Enter the shop</span>
+                <ArrowRight size={16} />
+              </Link>
+            </Button>
           </div>
         </div>
       </section>

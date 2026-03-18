@@ -21,19 +21,17 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-slate-950 text-white">
+    <footer className="mt-20 overflow-hidden rounded-t-[2rem] bg-black text-white">
       <div className="site-shell py-16">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div>
-            <h3
-              className="mb-4 text-4xl font-bold"
-              style={{
-                fontFamily: "'ADVENTURES', sans-serif",
-                color: "#f97316",
-              }}
-            >
-              ZANGI
-            </h3>
+            <img
+              src="/images/logo-white-Zangi.svg"
+              alt="Zangi"
+              className="mb-5 h-20 w-auto"
+              loading="lazy"
+              decoding="async"
+            />
             <p className="mb-6 leading-relaxed text-gray-400">
               A story-led brand built around courage, culture, and premium
               reading experiences for children, families, and schools.

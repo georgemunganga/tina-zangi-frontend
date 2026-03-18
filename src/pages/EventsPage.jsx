@@ -8,37 +8,27 @@ const EventsPage = () => {
     <div>
       <PageHero
         eyebrow="Events"
-        title="Step into the Zangi world live."
-        description="Discover upcoming Zangi events, choose a single-date experience, and purchase a digital ticket pass before checkout."
-        actions={[
-          { label: "Browse upcoming events", to: "/events#events", variant: "solid" },
-          { label: "Open the portal", to: "/portal/login", variant: "outline" },
-        ]}
-      >
-        <div className="inline-flex flex-wrap items-center justify-center gap-3 rounded-full bg-white/10 px-5 py-3 text-sm text-white/85 backdrop-blur">
-          <span className="rounded-full bg-white/15 px-3 py-1">Single-date events</span>
-          <span className="rounded-full bg-white/15 px-3 py-1">Digital ticketing</span>
-          <span className="rounded-full bg-white/15 px-3 py-1">Portal-ready passes</span>
-        </div>
-      </PageHero>
+        title="Live Zangi events."
+        description="Discover upcoming Zangi launches and family story experiences."
+        backgroundImage="/images/events bg.png"
+        backgroundImagePosition="72% center"
+      />
 
       <section id="events" className="bg-white py-20 sm:py-28">
         <div className="site-shell">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-[#0f766e]">
-              Upcoming experiences
+            <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#0f766e]">
+              Events list
             </p>
             <h2 className="mt-4 text-4xl font-semibold text-[#7c2d12] sm:text-5xl">
-              Events designed for story, culture, and real-world connection.
+              Browse upcoming events
             </h2>
-            <p className="mt-5 text-base leading-8 text-slate-600">
-              Each event has its own dedicated page, schedule details, and a
-              digital-only ticket checkout flow. Purchase history and passes stay
-              connected to the portal.
+            <p className="mt-5 text-base leading-8 text-slate-600 sm:text-lg">
+              Tap any event card to see the full details and ticket options.
             </p>
           </div>
 
-          <div className="mt-12 grid gap-8 lg:grid-cols-2 xl:grid-cols-3">
+          <div className="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
             {events.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
