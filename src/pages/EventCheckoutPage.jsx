@@ -37,6 +37,10 @@ import {
 import { openLencoPaymentWidget } from "@/lib/lenco";
 import { getPaymentMethodLabel } from "@/lib/payment";
 import { getRequestHint, getRequestMessage } from "@/lib/network";
+import {
+  getEventTicketDisplayLabel,
+  resolveEventTicketSales,
+} from "@/lib/event-ticket-pricing";
 
 const defaultTheme = {
   primary: "rgba(124,45,18,0.84)",
@@ -50,41 +54,23 @@ const EventCheckoutPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const event = useMemo(() => events.find((item) => item.slug === slug), [slug]);
+  const salesState = useMemo(() => resolveEventTicketSales(event), [event]);
   const {
-    currencyCode,
-    convertFromUsdToCurrency,
-    formatFromUsdToCurrency,
     formatStoredAmount,
     getCheckoutPaymentOptions,
     siteCurrencyCode,
   } = useCommerce();
   const selectedTicketId = searchParams.get("ticket");
-  const requestedCurrencyCode = searchParams.get("currency")?.toUpperCase();
   const paymentReference = searchParams.get("reference");
   const processingReferencesRef = useRef(new Set());
   const handledRedirectReferenceRef = useRef("");
 
-  const ticketOptions = useMemo(
-    () =>
-      event?.ticketTypes?.length
-        ? event.ticketTypes
-        : [
-            {
-              id: event?.defaultTicketType || "standard",
-              ...(event?.standardTicket || {}),
-            },
-          ],
-    [event],
-  );
+  const ticketOptions = salesState.ticketOptions;
   const selectedTicket =
     ticketOptions.find((item) => item.id === selectedTicketId) ||
     ticketOptions.find((item) => item.id === event?.defaultTicketType) ||
     ticketOptions[0];
-  const effectiveCurrencyCode =
-    requestedCurrencyCode === siteCurrencyCode || requestedCurrencyCode === "USD"
-      ? requestedCurrencyCode
-      : currencyCode;
-  const isCheckoutInZambia = effectiveCurrencyCode === siteCurrencyCode;
+  const effectiveCurrencyCode = siteCurrencyCode;
   const paymentOptions = useMemo(
     () =>
       getCheckoutPaymentOptions({
@@ -225,11 +211,12 @@ const EventCheckoutPage = () => {
     return <Navigate to={`/events/${event.slug}`} replace />;
   }
 
+  if (!salesState.isSalesOpen) {
+    return <Navigate to={`/events/${event.slug}`} replace />;
+  }
+
   const theme = { ...defaultTheme, ...(event.heroTheme || {}) };
-  const unitPrice = convertFromUsdToCurrency(
-    selectedTicket.price,
-    effectiveCurrencyCode,
-  );
+  const unitPrice = Number(selectedTicket?.priceZmw || 0);
   const total = Number((unitPrice * quantity).toFixed(2));
   const bannerStyle = {
     backgroundImage: `
@@ -241,9 +228,8 @@ const EventCheckoutPage = () => {
     backgroundSize: "cover",
     backgroundPosition: "center",
   };
-  const paymentNotice = isCheckoutInZambia
-    ? "Online payments for Zambia open in the secure Lenco window."
-    : "International ticket payments use secure card checkout in the Lenco window.";
+  const paymentNotice =
+    "Online ticket payments are completed in the secure Lenco window in Zambian Kwacha.";
 
   const buildReturnPath = () => {
     const params = new URLSearchParams(searchParams);
@@ -291,6 +277,8 @@ const EventCheckoutPage = () => {
           ticketTypeLabel: selectedTicket.label,
           quantity,
           unitPrice,
+          pricingRoundKey: selectedTicket.roundKey,
+          pricingRoundLabel: selectedTicket.roundLabel,
           organizationName:
             buyerType === "corporate" ? formState.organizationName : "",
         },
@@ -564,9 +552,17 @@ const EventCheckoutPage = () => {
                 <div className="flex items-center justify-between">
                   <span>Ticket type</span>
                   <span className="font-semibold text-white">
-                    {selectedTicket.label}
+                    {getEventTicketDisplayLabel(selectedTicket)}
                   </span>
                 </div>
+                {selectedTicket.id === "standard" && selectedTicket.publicRoundLabel ? (
+                  <div className="flex items-center justify-between">
+                    <span>Pricing round</span>
+                    <span className="font-semibold text-white">
+                      {selectedTicket.publicRoundLabel}
+                    </span>
+                  </div>
+                ) : null}
                 <div className="flex items-center justify-between">
                   <span>Date</span>
                   <span className="font-semibold text-white">{event.dateLabel}</span>
@@ -586,10 +582,7 @@ const EventCheckoutPage = () => {
                 <div className="flex items-center justify-between">
                   <span>Unit price</span>
                   <span className="font-semibold text-white">
-                    {formatFromUsdToCurrency(
-                      selectedTicket.price,
-                      effectiveCurrencyCode,
-                    )}
+                    {formatStoredAmount(unitPrice, effectiveCurrencyCode)}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
@@ -613,7 +606,7 @@ const EventCheckoutPage = () => {
               <div className="mt-6 rounded-[1.5rem] bg-white/5 p-5 text-sm leading-7 text-white/75">
                 <p>{selectedTicket.delivery}</p>
                 <p className="mt-3">
-                  Ticket linked to{" "}
+                  {getEventTicketDisplayLabel(selectedTicket)} linked to{" "}
                   <span className="font-semibold text-white">
                     {formState.email || "your buyer email"}
                   </span>

@@ -24,6 +24,7 @@ const buildCountdownParts = (remainingMs) => {
 
 const EventCountdownSection = ({
   startsAt,
+  countdownStartsAt,
   liveWindowHours = 5,
   dateLabel,
   timeLabel,
@@ -31,6 +32,10 @@ const EventCountdownSection = ({
 }) => {
   const [nowMs, setNowMs] = useState(() => Date.now());
   const startMs = useMemo(() => Date.parse(startsAt), [startsAt]);
+  const countdownStartMs = useMemo(
+    () => Date.parse(countdownStartsAt || startsAt),
+    [countdownStartsAt, startsAt],
+  );
   const liveWindowMs = liveWindowHours * HOUR;
 
   useEffect(() => {
@@ -46,6 +51,10 @@ const EventCountdownSection = ({
   }, [startMs]);
 
   if (!Number.isFinite(startMs)) {
+    return null;
+  }
+
+  if (Number.isFinite(countdownStartMs) && nowMs < countdownStartMs) {
     return null;
   }
 

@@ -48,6 +48,26 @@ const PortalTicketPassCard = ({ ticket, formatAmount }) => (
           {ticket.quantity} pass{ticket.quantity > 1 ? "es" : ""}
         </p>
       </div>
+      {ticket.pricingRoundLabel ? (
+        <div className="rounded-[1.25rem] bg-slate-50 px-4 py-3">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
+            Pricing round
+          </p>
+          <p className="mt-2 text-sm font-semibold text-slate-900">
+            {ticket.pricingRoundLabel}
+          </p>
+        </div>
+      ) : null}
+      {ticket.unitPrice != null ? (
+        <div className="rounded-[1.25rem] bg-slate-50 px-4 py-3">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
+            Unit price
+          </p>
+          <p className="mt-2 text-sm font-semibold text-slate-900">
+            {formatAmount(ticket.unitPrice, ticket.currency)}
+          </p>
+        </div>
+      ) : null}
       <div className="rounded-[1.25rem] bg-slate-50 px-4 py-3">
         <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-400">
           Total

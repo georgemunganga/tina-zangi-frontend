@@ -12,6 +12,10 @@ import EventCountdownSection from "@/components/EventCountdownSection";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { events } from "@/data/mock";
+import {
+  getEventTicketDisplayLabel,
+  resolveEventTicketSales,
+} from "@/lib/event-ticket-pricing";
 import { useCommerce } from "@/providers/CommerceProvider";
 
 const defaultTheme = {
@@ -45,8 +49,10 @@ const EventTicketPanel = ({
   setSelectedTicketId,
   ticketOptions,
   theme,
-  formatFromUsd,
+  formatAmount,
   quotedCurrencyCode,
+  salesStatus,
+  salesOpenLabel,
   className = "",
 }) => {
   const checkoutSearch = new URLSearchParams({
@@ -70,7 +76,7 @@ const EventTicketPanel = ({
             Online Tickets
           </p>
           <p className="mt-1 text-lg font-semibold text-white">
-            {selectedTicket.label}
+            {getEventTicketDisplayLabel(selectedTicket)}
           </p>
         </div>
       </div>
@@ -95,14 +101,14 @@ const EventTicketPanel = ({
                   isActive ? "text-[#0f766e]" : "text-white/65"
                 }`}
               >
-                {ticket.label}
+                {getEventTicketDisplayLabel(ticket)}
               </p>
               <p
                 className={`mt-2 text-lg font-semibold ${
                   isActive ? "text-slate-900" : "text-white"
                 }`}
               >
-                {formatFromUsd(ticket.price)}
+                {formatAmount(ticket.priceZmw, quotedCurrencyCode)}
               </p>
             </button>
           );
@@ -110,8 +116,13 @@ const EventTicketPanel = ({
       </div>
 
       <p className="mt-7 text-5xl font-semibold text-white">
-        {formatFromUsd(selectedTicket.price)}
+        {formatAmount(selectedTicket.priceZmw, quotedCurrencyCode)}
       </p>
+      {selectedTicket.id === "standard" && selectedTicket.publicRoundLabel ? (
+        <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-white/70">
+          {selectedTicket.publicRoundLabel}
+        </p>
+      ) : null}
       <p className="mt-4 text-sm leading-7 text-white/75">
         {selectedTicket.delivery}
       </p>
@@ -120,6 +131,19 @@ const EventTicketPanel = ({
         <div className="mt-6 rounded-[1.5rem] bg-white/12 px-5 py-4 text-sm font-medium text-white/82">
           This launch is sold out. Check back on the events page for the next
           release.
+        </div>
+      ) : salesStatus === "upcoming" ? (
+        <div className="mt-6 rounded-[1.5rem] bg-white/12 px-5 py-4 text-sm font-medium text-white/82">
+          Ticket sales open on {salesOpenLabel}. Early Bird Standard starts at{" "}
+          {formatAmount(
+            ticketOptions.find((ticket) => ticket.id === "standard")?.priceZmw || 250,
+            quotedCurrencyCode,
+          )}
+          .
+        </div>
+      ) : salesStatus === "closed" ? (
+        <div className="mt-6 rounded-[1.5rem] bg-white/12 px-5 py-4 text-sm font-medium text-white/82">
+          Ticket sales have closed for this launch.
         </div>
       ) : (
         <div className="mt-7">
@@ -141,19 +165,12 @@ const EventTicketPanel = ({
 const EventDetailPage = () => {
   const { slug } = useParams();
   const [searchParams] = useSearchParams();
-  const { formatFromUsd, siteCurrencyCode } = useCommerce();
+  const { formatStoredAmount, siteCurrencyCode } = useCommerce();
   const event = useMemo(() => events.find((item) => item.slug === slug), [slug]);
+  const salesState = useMemo(() => resolveEventTicketSales(event), [event]);
   const ticketOptions = useMemo(
-    () =>
-      event?.ticketTypes?.length
-        ? event.ticketTypes
-        : [
-            {
-              id: event?.defaultTicketType || "standard",
-              ...(event?.standardTicket || {}),
-            },
-          ],
-    [event],
+    () => salesState.ticketOptions,
+    [salesState.ticketOptions],
   );
   const [selectedTicketId, setSelectedTicketId] = useState("standard");
   const [ticketModalOpen, setTicketModalOpen] = useState(false);
@@ -298,12 +315,14 @@ const EventDetailPage = () => {
                 isSoldOut={isSoldOut}
                 selectedTicket={selectedTicket}
                 selectedTicketId={selectedTicketId}
-                setSelectedTicketId={setSelectedTicketId}
-                ticketOptions={ticketOptions}
-                theme={theme}
-                formatFromUsd={formatFromUsd}
-                quotedCurrencyCode={siteCurrencyCode}
-              />
+              setSelectedTicketId={setSelectedTicketId}
+              ticketOptions={ticketOptions}
+              theme={theme}
+              formatAmount={formatStoredAmount}
+              quotedCurrencyCode={siteCurrencyCode}
+              salesStatus={salesState.salesStatus}
+              salesOpenLabel={salesState.salesOpenLabel}
+            />
             </aside>
           </div>
 
@@ -321,8 +340,10 @@ const EventDetailPage = () => {
             setSelectedTicketId={setSelectedTicketId}
             ticketOptions={ticketOptions}
             theme={theme}
-            formatFromUsd={formatFromUsd}
+            formatAmount={formatStoredAmount}
             quotedCurrencyCode={siteCurrencyCode}
+            salesStatus={salesState.salesStatus}
+            salesOpenLabel={salesState.salesOpenLabel}
             className="bg-[linear-gradient(140deg,rgba(124,45,18,0.96)_0%,rgba(15,23,42,0.96)_100%)]"
           />
         </DialogContent>
@@ -330,6 +351,7 @@ const EventDetailPage = () => {
 
       <EventCountdownSection
         startsAt={event.startsAt}
+        countdownStartsAt={salesState.countdownStartsAt}
         liveWindowHours={event.liveWindowHours}
         dateLabel={event.dateLabel}
         timeLabel={event.timeLabel}
@@ -348,7 +370,7 @@ const EventDetailPage = () => {
             <p className="mt-5 text-base leading-8 text-slate-600">
               {event.description}
             </p>
-            {!isSoldOut ? (
+            {!isSoldOut && salesState.isSalesOpen ? (
               <Button
                 type="button"
                 variant="brand"
@@ -440,7 +462,7 @@ const EventDetailPage = () => {
               </div>
               
             </div>
-            {!isSoldOut ? (
+            {!isSoldOut && salesState.isSalesOpen ? (
               <Button
                 type="button"
                 variant="brandSecondary"

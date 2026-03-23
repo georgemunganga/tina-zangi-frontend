@@ -195,10 +195,11 @@ export const events = [
       "Right now the Zangi events section is focused on one physical launch in Lusaka for children, parents, schools, and invited community guests.",
     description:
       "This launch event introduces the world of Zangi in person through a live reading, a formal book reveal, family-friendly reflection moments, and a closing atmosphere built around books, culture, and imagination. It is designed to feel more like a real launch experience than a simple reading session.",
-    startDate: "2026-05-22",
-    startsAt: "2026-05-22T18:00:00+02:00",
+    startDate: "2026-04-03",
+    startsAt: "2026-04-03T18:00:00+02:00",
+    countdownStartsAt: "2026-03-25T00:00:00+02:00",
     liveWindowHours: 5,
-    dateLabel: "May 22, 2026",
+    dateLabel: "April 3, 2026",
     timeLabel: "6:00 PM - 7:30 PM CAT",
     locationLabel: "Mulungushi International Conference Centre, Lusaka",
     mode: "in-person",
@@ -280,27 +281,59 @@ export const events = [
     ],
     ctaLabel: "Get your ticket",
     availabilityNote:
-      "This is the only live Zangi event open right now, with limited seating for the Mulungushi launch in Lusaka.",
+      "Standard tickets open on March 25, 2026 and move through Early Bird, Standard, and Last Tickets pricing before the April 3 launch.",
+    ticketSales: {
+      timezone: "Africa/Lusaka",
+      opensAt: "2026-03-25T00:00:00+02:00",
+      closesAt: "2026-04-03T23:59:59+02:00",
+      salesOpenLabel: "March 25, 2026",
+      rounds: [
+        {
+          key: "early_bird",
+          label: "Early Bird",
+          publicLabel: "Early Bird",
+          startsOn: "2026-03-25",
+          endsOn: "2026-03-27",
+          priceZmw: 250,
+        },
+        {
+          key: "standard",
+          label: "Standard",
+          publicLabel: "Standard",
+          startsOn: "2026-03-28",
+          endsOn: "2026-03-30",
+          priceZmw: 300,
+        },
+        {
+          key: "late",
+          label: "Late",
+          publicLabel: "Last Tickets",
+          startsOn: "2026-03-31",
+          endsOn: "2026-04-03",
+          priceZmw: 350,
+        },
+      ],
+    },
     defaultTicketType: "standard",
     ticketTypes: [
       {
         id: "standard",
         label: "Standard",
-        price: 350 / 28,
+        priceStrategy: "rounds",
         delivery:
           "Digital event pass delivered instantly to the portal after checkout, with a QR placeholder for venue entry.",
       },
       {
         id: "vip",
         label: "VIP",
-        price: 500 / 28,
+        priceZmw: 500,
         delivery:
           "VIP digital event pass delivered instantly to the portal after checkout, with a QR placeholder for venue entry.",
       },
     ],
     standardTicket: {
       label: "Standard",
-      price: 350 / 28,
+      priceStrategy: "rounds",
       delivery:
         "Digital event pass delivered instantly to the portal after checkout, with a QR placeholder for venue entry.",
     },
@@ -444,7 +477,7 @@ export const authorProfile = {
 
 export const contactDetails = {
   email: "hello@zangisworld.com",
-  phone: "+260 0972931526",
+  phone: "+26 0972827372",
   address: "Zangi Creative Studio, Lusaka, Zambia",
   responseTime: "We aim to respond within 2 business days.",
 };
