@@ -35,11 +35,15 @@ const iconMap = {
 const ProductDetailPage = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
-  const { formatFromUsd, pricingNotice, siteCurrencyCode } = useCommerce();
+  const { formatFromUsd, getVisibleBookFormats, siteCurrencyCode } = useCommerce();
 
   const product = useMemo(
     () => books.find((item) => item.slug === slug),
     [slug],
+  );
+  const visibleFormats = useMemo(
+    () => getVisibleBookFormats(product?.formats),
+    [getVisibleBookFormats, product?.formats],
   );
   const [selectedFormatType, setSelectedFormatType] = useState("digital");
   const [quantityDialogOpen, setQuantityDialogOpen] = useState(false);
@@ -50,19 +54,28 @@ const ProductDetailPage = () => {
       return;
     }
 
-    setSelectedFormatType(product.defaultFormat || product.formats[0]?.type || "digital");
-  }, [product]);
+    const defaultFormatType =
+      visibleFormats.find((format) => format.type === product.defaultFormat)?.type ||
+      visibleFormats[0]?.type ||
+      "hardcopy";
+
+    setSelectedFormatType(defaultFormatType);
+  }, [product, visibleFormats]);
 
   if (!product) {
     return <Navigate to="/shop" replace />;
   }
 
+  if (!visibleFormats.length) {
+    return <Navigate to="/shop" replace />;
+  }
+
   const selectedFormat =
-    product.formats.find((format) => format.type === selectedFormatType) ||
-    product.formats[0];
+    visibleFormats.find((format) => format.type === selectedFormatType) ||
+    visibleFormats[0];
   const hardcopyFormat =
-    product.formats.find((format) => format.type === "hardcopy") ||
-    product.formats[0];
+    visibleFormats.find((format) => format.type === "hardcopy") ||
+    visibleFormats[0];
   const hardcopyTotal = Number((hardcopyFormat.price * hardcopyQuantity).toFixed(2));
 
   const handleCheckout = () => {
@@ -134,12 +147,16 @@ const ProductDetailPage = () => {
 
               <div className="mt-8">
                 <p className="text-sm font-semibold uppercase tracking-[0.12em] text-[#0f766e]">
-                  Choose your format
+                  {visibleFormats.length > 1 ? "Choose your format" : "Available format"}
                 </p>
               </div>
 
-              <div className="mt-4 grid grid-cols-2 gap-4">
-                {product.formats.map((format) => (
+              <div
+                className={`mt-4 grid gap-4 ${
+                  visibleFormats.length > 1 ? "sm:grid-cols-2" : "max-w-sm"
+                }`}
+              >
+                {visibleFormats.map((format) => (
                   <button
                     key={format.type}
                     type="button"

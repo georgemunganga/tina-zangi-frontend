@@ -2,14 +2,25 @@ import React from "react";
 import PageHero from "@/components/PageHero";
 import ShopProductCard from "@/components/ShopProductCard";
 import { books } from "@/data/mock";
+import { useCommerce } from "@/providers/CommerceProvider";
 
 const ShopPage = () => {
+  const { isZambian } = useCommerce();
+
   return (
     <div>
       <PageHero
         eyebrow="Shop"
-        title="Choose the book. Then choose the format."
-        description="Every Zangi product starts here. Browse the collection, open a product, and select digital or hardcopy before continuing to checkout."
+        title={
+          isZambian
+            ? "Choose the book. Then continue with hardcopy."
+            : "Choose the book. Then choose the format."
+        }
+        description={
+          isZambian
+            ? "Every Zangi product starts here. Browse the collection, open a product, and continue with the hardcopy edition available in Zambia."
+            : "Every Zangi product starts here. Browse the collection, open a product, and select digital or hardcopy before continuing to checkout."
+        }
       >
       
       </PageHero>

@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight, Mail } from "lucide-react";
 import { toast } from "sonner";
+import { useCommerce } from "@/providers/CommerceProvider";
 import { Button } from "@/components/ui/button";
 import RequestStatusNotice from "@/components/ui/request-status-notice";
 
 const FinalCTA = () => {
+  const { isZambian } = useCommerce();
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [notice, setNotice] = useState(null);
@@ -41,11 +43,14 @@ const FinalCTA = () => {
                 className="mt-4 text-5xl font-bold leading-none sm:text-6xl lg:text-[4.5rem]"
                 style={{ fontFamily: "'ADVENTURES', sans-serif" }}
               >
-                Choose how you want to read Zangi.
+                {isZambian
+                  ? "Order the Zangi hardcopy books."
+                  : "Choose how you want to read Zangi."}
               </h2>
               <p className="mt-6 text-lg leading-8 text-white/84">
-                Browse the books, pick digital or hardcopy, and keep your orders
-                in one place through the portal.
+                {isZambian
+                  ? "Browse the books, order the hardcopy editions available in Zambia, and keep your orders in one place through the portal."
+                  : "Browse the books, pick digital or hardcopy, and keep your orders in one place through the portal."}
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">

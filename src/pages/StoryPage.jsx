@@ -5,9 +5,12 @@ import PageHero from "@/components/PageHero";
 import MeetZangi from "@/components/MeetZangi";
 import StoryWorld from "@/components/StoryWorld";
 import { storyWorld } from "@/data/mock";
+import { useCommerce } from "@/providers/CommerceProvider";
 import { Button } from "@/components/ui/button";
 
 const StoryPage = () => {
+  const { isZambian } = useCommerce();
+
   return (
     <div className="overflow-hidden">
       <PageHero
@@ -64,12 +67,14 @@ const StoryPage = () => {
               className="mt-4 text-4xl font-bold leading-none sm:text-5xl"
               style={{ fontFamily: "'ADVENTURES', sans-serif" }}
             >
-              Explore the world, then choose the format that fits.
+              {isZambian
+                ? "Explore the world, then order the hardcopy edition."
+                : "Explore the world, then choose the format that fits."}
             </h3>
             <p className="mt-5 max-w-2xl text-base leading-7 text-white/80">
-              Every book in the shop lets readers decide between digital and
-              hardcopy before checkout, so the purchase flow stays clear and
-              intentional.
+              {isZambian
+                ? "Book orders in Zambia currently continue through the hardcopy edition, so the purchase flow stays focused and clear."
+                : "Every book in the shop lets readers decide between digital and hardcopy before checkout, so the purchase flow stays clear and intentional."}
             </p>
             <Button asChild variant="brandSecondary" size="pill" className="mt-7">
               <Link to="/shop">

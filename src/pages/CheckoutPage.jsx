@@ -56,14 +56,19 @@ const CheckoutPage = () => {
     convertFromUsdToCurrency,
     formatFromUsdToCurrency,
     formatStoredAmount,
+    getVisibleBookFormats,
     getCheckoutPaymentOptions,
     siteCurrencyCode,
   } = useCommerce();
 
   const product = useMemo(() => books.find((item) => item.slug === slug), [slug]);
+  const visibleFormats = useMemo(
+    () => getVisibleBookFormats(product?.formats),
+    [getVisibleBookFormats, product?.formats],
+  );
   const selectedFormat = useMemo(
-    () => product?.formats.find((item) => item.type === formatType),
-    [formatType, product],
+    () => visibleFormats.find((item) => item.type === formatType),
+    [formatType, visibleFormats],
   );
   const effectiveCurrencyCode =
     requestedCurrencyCode === siteCurrencyCode || requestedCurrencyCode === "USD"
@@ -212,6 +217,10 @@ const CheckoutPage = () => {
   }, [completeVerifiedOrder, paymentReference]);
 
   if (!product) {
+    return <Navigate to="/shop" replace />;
+  }
+
+  if (!visibleFormats.length) {
     return <Navigate to="/shop" replace />;
   }
 

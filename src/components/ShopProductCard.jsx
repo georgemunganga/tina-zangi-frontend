@@ -5,8 +5,14 @@ import { useCommerce } from "@/providers/CommerceProvider";
 import { Button } from "@/components/ui/button";
 
 const ShopProductCard = ({ product, ctaLabel = "View details" }) => {
-  const { formatFromUsd } = useCommerce();
-  const prices = product.formats.map((format) => format.price);
+  const { formatFromUsd, getVisibleBookFormats } = useCommerce();
+  const visibleFormats = getVisibleBookFormats(product.formats);
+
+  if (!visibleFormats.length) {
+    return null;
+  }
+
+  const prices = visibleFormats.map((format) => format.price);
   const minPrice = Math.min(...prices);
   const metadata = `${product.type} · ${product.ageRange}`;
 
@@ -31,7 +37,7 @@ const ShopProductCard = ({ product, ctaLabel = "View details" }) => {
         </h3>
 
         <div className="mt-4 flex flex-wrap gap-2">
-          {product.formats.map((format) => (
+          {visibleFormats.map((format) => (
             <span
               key={format.type}
               className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-slate-700"

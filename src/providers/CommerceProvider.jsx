@@ -109,6 +109,16 @@ function getCurrencyLocale(currencyCode, browserLocale) {
   return currencyCode === SITE_CURRENCY_CODE ? SITE_LOCALE : browserLocale || "en-US";
 }
 
+function filterVisibleBookFormats(formats, { isZambian } = {}) {
+  const normalizedFormats = Array.isArray(formats) ? formats : [];
+
+  if (isZambian) {
+    return normalizedFormats.filter((format) => format?.type !== "digital");
+  }
+
+  return normalizedFormats;
+}
+
 export const CommerceProvider = ({ children }) => {
   const browserLocale = useMemo(() => getBrowserLocale(), []);
   const countryCode = useMemo(() => detectCountryCode(), []);
@@ -147,6 +157,9 @@ export const CommerceProvider = ({ children }) => {
       isZambian,
       currencyCode,
       siteCurrencyCode: SITE_CURRENCY_CODE,
+      getVisibleBookFormats(formats) {
+        return filterVisibleBookFormats(formats, { isZambian });
+      },
       getCheckoutPaymentOptions({
         purchaseType,
         formatType,

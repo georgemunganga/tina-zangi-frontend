@@ -5,8 +5,14 @@ import { books } from "@/data/mock";
 import { useCommerce } from "@/providers/CommerceProvider";
 import { Button } from "@/components/ui/button";
 
-const HomepageBookCard = ({ product, formatFromUsd }) => {
-  const minPrice = Math.min(...product.formats.map((format) => format.price));
+const HomepageBookCard = ({ product, formatFromUsd, getVisibleBookFormats }) => {
+  const visibleFormats = getVisibleBookFormats(product.formats);
+
+  if (!visibleFormats.length) {
+    return null;
+  }
+
+  const minPrice = Math.min(...visibleFormats.map((format) => format.price));
 
   return (
     <article className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.07)]">
@@ -36,7 +42,7 @@ const HomepageBookCard = ({ product, formatFromUsd }) => {
           </p>
 
           <div className="mt-5 flex flex-wrap gap-2">
-            {product.formats.map((format) => (
+            {visibleFormats.map((format) => (
               <span
                 key={format.type}
                 className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.08em] text-slate-700"
@@ -70,7 +76,7 @@ const HomepageBookCard = ({ product, formatFromUsd }) => {
 };
 
 const FeaturedBooks = () => {
-  const { formatFromUsd } = useCommerce();
+  const { formatFromUsd, getVisibleBookFormats } = useCommerce();
 
   return (
     <section className="bg-[linear-gradient(180deg,#ffffff_0%,#fffaf5_100%)] py-20 sm:py-28">
@@ -109,6 +115,7 @@ const FeaturedBooks = () => {
               key={product.id}
               product={product}
               formatFromUsd={formatFromUsd}
+              getVisibleBookFormats={getVisibleBookFormats}
             />
           ))}
         </div>

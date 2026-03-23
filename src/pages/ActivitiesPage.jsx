@@ -3,9 +3,12 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import { activityHighlights } from "@/data/mock";
+import { useCommerce } from "@/providers/CommerceProvider";
 import { Button } from "@/components/ui/button";
 
 const ActivitiesPage = () => {
+  const { isZambian } = useCommerce();
+
   return (
     <div>
       <PageHero
@@ -72,7 +75,11 @@ const ActivitiesPage = () => {
             </p>
             <Button asChild variant="brand" size="pill" className="mt-7">
               <Link to="/shop/zangi-adventure-activity-book">
-                <span>Choose a format for the activity book</span>
+                <span>
+                  {isZambian
+                    ? "Order the activity book hardcopy"
+                    : "Choose a format for the activity book"}
+                </span>
                 <ArrowRight size={16} />
               </Link>
             </Button>
