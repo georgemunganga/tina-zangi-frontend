@@ -1,74 +1,51 @@
 import { LayoutDashboard, Package, Ticket } from "lucide-react";
 
-export const portalRoleLabels = {
-  individual: "Reader",
-  corporate: "Organization",
-  wholesale: "Wholesale",
+const basePortalNavItems = [
+  {
+    id: "overview",
+    label: "Overview",
+    path: "/portal/overview",
+    icon: LayoutDashboard,
+  },
+  {
+    id: "orders",
+    label: "Orders",
+    path: "/portal/orders",
+    icon: Package,
+  },
+];
+
+const ticketsPortalNavItem = {
+  id: "tickets",
+  label: "Tickets",
+  path: "/portal/tickets",
+  icon: Ticket,
 };
 
-const portalNavItems = {
-  individual: [
-    {
-      id: "overview",
-      label: "Overview",
-      path: "/portal/overview",
-      icon: LayoutDashboard,
-    },
-    {
-      id: "orders",
-      label: "Orders",
-      path: "/portal/orders",
-      icon: Package,
-    },
-    {
-      id: "tickets",
-      label: "Tickets",
-      path: "/portal/tickets",
-      icon: Ticket,
-    },
-  ],
-  corporate: [
-    {
-      id: "overview",
-      label: "Overview",
-      path: "/portal/overview",
-      icon: LayoutDashboard,
-    },
-    {
-      id: "orders",
-      label: "Orders",
-      path: "/portal/orders",
-      icon: Package,
-    },
-    {
-      id: "tickets",
-      label: "Tickets",
-      path: "/portal/tickets",
-      icon: Ticket,
-    },
-  ],
-  wholesale: [
-    {
-      id: "overview",
-      label: "Overview",
-      path: "/portal/overview",
-      icon: LayoutDashboard,
-    },
-    {
-      id: "orders",
-      label: "Orders",
-      path: "/portal/orders",
-      icon: Package,
-    },
-  ],
-};
+export function getPortalNavItems(portalMode, { supportsTickets = true } = {}) {
+  if (portalMode === "group" && !supportsTickets) {
+    return basePortalNavItems;
+  }
 
-export function getPortalNavItems(role) {
-  return portalNavItems[role] || portalNavItems.individual;
+  return supportsTickets
+    ? [...basePortalNavItems, ticketsPortalNavItem]
+    : basePortalNavItems;
 }
 
-export function getPortalRoleLabel(role) {
-  return portalRoleLabels[role] || "Portal";
+export function getPortalRoleLabel(portalMode, groupType = null) {
+  if (portalMode === "group") {
+    if (groupType === "wholesale") {
+      return "Wholesale";
+    }
+
+    if (groupType === "corporate") {
+      return "Corporate";
+    }
+
+    return "Group";
+  }
+
+  return "Individual";
 }
 
 export function getStatusTone(status) {

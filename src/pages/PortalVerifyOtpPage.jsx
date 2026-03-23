@@ -9,6 +9,8 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { buildPortalNextPath, buildPortalSearch } from "@/lib/portal-auth";
+import RequestStatusNotice from "@/components/ui/request-status-notice";
+import { getRequestHint, getRequestMessage } from "@/lib/network";
 import { useAuth } from "@/providers/AuthProvider";
 
 const PortalVerifyOtpPage = () => {
@@ -23,7 +25,7 @@ const PortalVerifyOtpPage = () => {
   const devCode = searchParams.get("devCode");
   const nextPath = buildPortalNextPath({ next, orderId, ticketId });
   const [code, setCode] = useState("");
-  const [error, setError] = useState("");
+  const [requestState, setRequestState] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const loginSearch = useMemo(
@@ -44,19 +46,35 @@ const PortalVerifyOtpPage = () => {
 
   const handleVerify = async () => {
     setIsSubmitting(true);
-    setError("");
+    setRequestState({
+      tone: "loading",
+      title: "Verifying your code",
+      message: "We are checking the code and opening the linked portal account.",
+    });
 
     try {
       await verifyOtp({ email, code });
       navigate(nextPath, { replace: true });
     } catch (authError) {
+      const message = getRequestMessage(
+        authError,
+        "We could not verify portal access. Start the login flow again.",
+      );
+      const hint = getRequestHint(authError);
       if (authError.code === "OTP_INVALID") {
-        setError(authError.message || "That code is not valid. Check the email and try again.");
+        setRequestState({
+          tone: "error",
+          title: "That code did not work",
+          message,
+          hint,
+        });
       } else {
-        setError(
-          authError.message ||
-            "We could not verify portal access. Start the login flow again.",
-        );
+        setRequestState({
+          tone: authError?.code === "NETWORK_ERROR" || authError?.status === 0 ? "network" : "error",
+          title: "We could not verify the code",
+          message,
+          hint,
+        });
       }
     } finally {
       setIsSubmitting(false);
@@ -66,7 +84,7 @@ const PortalVerifyOtpPage = () => {
   return (
     <PortalAuthShell
       title="Verify your access"
-      description="Enter the six-digit code to finish opening your portal account."
+      description="Enter the six-digit code sent to your purchase email to finish opening your portal account."
       orderId={orderId}
       ticketId={ticketId}
     >
@@ -111,10 +129,14 @@ const PortalVerifyOtpPage = () => {
         </InputOTP>
       </div>
 
-      {error ? (
-        <div className="mt-5 rounded-[1.5rem] border border-amber-200 bg-amber-50 p-4">
-          <p className="text-sm leading-7 text-amber-900">{error}</p>
-        </div>
+      {requestState ? (
+        <RequestStatusNotice
+          tone={requestState.tone}
+          title={requestState.title}
+          message={requestState.message}
+          hint={requestState.hint}
+          className="mt-5"
+        />
       ) : null}
 
       <Button

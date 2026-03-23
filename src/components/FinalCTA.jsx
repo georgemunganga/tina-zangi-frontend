@@ -3,20 +3,29 @@ import { Link } from "react-router-dom";
 import { ChevronRight, Mail } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import RequestStatusNotice from "@/components/ui/request-status-notice";
 
 const FinalCTA = () => {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [notice, setNotice] = useState(null);
 
   const handleNewsletterSubmit = (event) => {
     event.preventDefault();
     setIsSubmitting(true);
 
     window.setTimeout(() => {
-      toast.success("Welcome to the Zangi world. Check your email for confirmation.");
-      setEmail("");
+      const message =
+        "Email updates are not live yet. Use the contact page if you want direct follow-up from the team.";
+      toast.message(message);
+      setNotice({
+        tone: "network",
+        title: "Email updates are not live yet",
+        message,
+        hint: "The shop, portal, and contact routes are live. Newsletter signup is still pending backend support.",
+      });
       setIsSubmitting(false);
-    }, 1000);
+    }, 500);
   };
 
   return (
@@ -63,6 +72,14 @@ const FinalCTA = () => {
               </p>
 
               <form onSubmit={handleNewsletterSubmit} className="mt-6 grid gap-3">
+                {notice ? (
+                  <RequestStatusNotice
+                    tone={notice.tone}
+                    title={notice.title}
+                    message={notice.message}
+                    hint={notice.hint}
+                  />
+                ) : null}
                 <label className="relative block">
                   <Mail
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"

@@ -5,11 +5,18 @@ import { navigationItems } from "@/data/mock";
 import { useAuth } from "@/providers/AuthProvider";
 import { Button } from "@/components/ui/button";
 
-const portalLabels = {
-  individual: "Reader Dashboard",
-  corporate: "School Dashboard",
-  wholesale: "Partner Dashboard",
-};
+function getPortalLabel(session) {
+  const portalMode =
+    session?.portalMode || (["corporate", "wholesale"].includes(session?.role) ? "group" : "individual");
+  const groupType =
+    session?.groupType || (portalMode === "group" ? (session?.role === "wholesale" ? "wholesale" : "corporate") : null);
+
+  if (portalMode === "group") {
+    return groupType === "wholesale" ? "Wholesale Dashboard" : "Group Dashboard";
+  }
+
+  return "Reader Dashboard";
+}
 
 const Header = ({ forceDarkLogo = false, forceDarkText = false }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -26,9 +33,7 @@ const Header = ({ forceDarkLogo = false, forceDarkText = false }) => {
   }, []);
 
   const portalLink = portalSession ? "/portal" : "/portal/login";
-  const portalLabel = portalSession
-    ? portalLabels[portalSession.role] || "Dashboard"
-    : "Login to portal";
+  const portalLabel = portalSession ? getPortalLabel(portalSession) : "Login to portal";
   const useDarkHeaderText = isScrolled || forceDarkText;
   const logoSrc =
     isScrolled || forceDarkLogo

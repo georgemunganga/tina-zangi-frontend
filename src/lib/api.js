@@ -38,6 +38,18 @@ async function parseJson(response) {
   }
 }
 
+function buildQueryPath(basePath, params = {}) {
+  const search = new URLSearchParams();
+
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      search.set(key, String(value));
+    }
+  });
+
+  return search.toString() ? `${basePath}?${search.toString()}` : basePath;
+}
+
 function getErrorMessage(data) {
   if (typeof data?.message === "string" && data.message.trim()) {
     return data.message;
@@ -67,16 +79,30 @@ function createApiError(data, response) {
 }
 
 async function requestJson(path, { method = "GET", payload, token, headers } = {}) {
-  const response = await fetch(buildApiUrl(path), {
-    method,
-    headers: {
-      Accept: "application/json",
-      ...(payload ? { "Content-Type": "application/json" } : {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...headers,
-    },
-    ...(payload ? { body: JSON.stringify(payload) } : {}),
-  });
+  let response;
+
+  try {
+    response = await fetch(buildApiUrl(path), {
+      method,
+      headers: {
+        Accept: "application/json",
+        ...(payload ? { "Content-Type": "application/json" } : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...headers,
+      },
+      ...(payload ? { body: JSON.stringify(payload) } : {}),
+    });
+  } catch (networkError) {
+    const error = new Error(
+      typeof navigator !== "undefined" && navigator.onLine === false
+        ? "You are offline right now."
+        : "We could not reach the server.",
+    );
+    error.status = 0;
+    error.code = "NETWORK_ERROR";
+    error.cause = networkError;
+    throw error;
+  }
 
   const data = await parseJson(response);
 
@@ -149,51 +175,21 @@ export async function logoutPortal(accessToken) {
 }
 
 export async function fetchPortalOverview(accessToken, params = {}) {
-  const search = new URLSearchParams();
-
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== "") {
-      search.set(key, String(value));
-    }
+  return requestJson(buildQueryPath("/api/v1/portal/overview", params), {
+    token: accessToken,
   });
-
-  const nextPath = search.toString()
-    ? `/api/v1/portal/overview?${search.toString()}`
-    : "/api/v1/portal/overview";
-
-  return requestJson(nextPath, { token: accessToken });
 }
 
 export async function fetchPortalOrders(accessToken, params = {}) {
-  const search = new URLSearchParams();
-
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== "") {
-      search.set(key, String(value));
-    }
+  return requestJson(buildQueryPath("/api/v1/portal/orders", params), {
+    token: accessToken,
   });
-
-  const nextPath = search.toString()
-    ? `/api/v1/portal/orders?${search.toString()}`
-    : "/api/v1/portal/orders";
-
-  return requestJson(nextPath, { token: accessToken });
 }
 
 export async function fetchPortalTickets(accessToken, params = {}) {
-  const search = new URLSearchParams();
-
-  Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== "") {
-      search.set(key, String(value));
-    }
+  return requestJson(buildQueryPath("/api/v1/portal/tickets", params), {
+    token: accessToken,
   });
-
-  const nextPath = search.toString()
-    ? `/api/v1/portal/tickets?${search.toString()}`
-    : "/api/v1/portal/tickets";
-
-  return requestJson(nextPath, { token: accessToken });
 }
 
 export async function createCashOnDeliveryBookOrder(payload) {

@@ -147,9 +147,15 @@ export const CommerceProvider = ({ children }) => {
       isZambian,
       currencyCode,
       siteCurrencyCode: SITE_CURRENCY_CODE,
-      getCheckoutPaymentOptions({ purchaseType, formatType }) {
+      getCheckoutPaymentOptions({
+        purchaseType,
+        formatType,
+        currencyCode: checkoutCurrencyCode,
+      }) {
+        const effectiveCurrencyCode = checkoutCurrencyCode || currencyCode;
+
         return getPaymentOptionsByCountry({
-          isZambian,
+          isZambian: effectiveCurrencyCode === SITE_CURRENCY_CODE,
           purchaseType,
           formatType,
         });

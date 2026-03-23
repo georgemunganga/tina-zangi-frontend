@@ -63,7 +63,7 @@ const SidebarContent = ({ user, items, onLogout }) => (
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold">{user.name}</p>
           <p className="mt-1 text-xs uppercase tracking-[0.14em] text-white/55">
-            {getPortalRoleLabel(user.role)} portal
+            {user.accountLabel || `${getPortalRoleLabel(user.portalMode || user.role, user.groupType)} portal`}
           </p>
         </div>
       </div>
@@ -107,7 +107,9 @@ const PortalShell = ({ user, items, onLogout, children }) => {
                   {user.name}
                 </p>
                 <p className="truncate text-xs text-slate-500">
-                  {user.organizationName || `${getPortalRoleLabel(user.role)} portal`}
+                  {user.organizationName ||
+                    user.accountLabel ||
+                    `${getPortalRoleLabel(user.portalMode || user.role, user.groupType)} portal`}
                 </p>
               </div>
             </div>

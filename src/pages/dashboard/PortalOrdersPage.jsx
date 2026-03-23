@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { usePortalDashboardContext } from "@/pages/dashboard/PortalLayout";
 
 const PortalOrdersPage = () => {
-  const { allOrders, error, formatStoredAmount, isLoading } =
+  const { allOrders, error, formatStoredAmount, isLoading, reloadDashboard } =
     usePortalDashboardContext();
   const [filter, setFilter] = useState("all");
 
@@ -28,7 +28,14 @@ const PortalOrdersPage = () => {
   }
 
   if (error) {
-    return <PortalEmptyState title="Orders are unavailable" description={error} />;
+    return (
+      <PortalEmptyState
+        title="Orders are unavailable"
+        description={error}
+        actionLabel="Try again"
+        onAction={reloadDashboard}
+      />
+    );
   }
 
   return (

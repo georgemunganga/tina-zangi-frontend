@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { portalPersonas } from "@/data/mock";
 import { buildPortalNextPath, buildPortalSearch } from "@/lib/portal-auth";
+import RequestStatusNotice from "@/components/ui/request-status-notice";
+import { getRequestHint, getRequestMessage } from "@/lib/network";
 import { useAuth } from "@/providers/AuthProvider";
 
 const PortalSignupPage = () => {
@@ -25,7 +27,7 @@ const PortalSignupPage = () => {
     phone: "",
     organizationName: "",
   });
-  const [error, setError] = useState("");
+  const [requestState, setRequestState] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -38,7 +40,11 @@ const PortalSignupPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError("");
+    setRequestState({
+      tone: "loading",
+      title: "Creating your portal account",
+      message: "We are setting up the account and preparing the verification code now.",
+    });
     setIsSubmitting(true);
 
     try {
@@ -54,10 +60,25 @@ const PortalSignupPage = () => {
 
       navigate(`/portal/verify-otp?${otpSearch}`);
     } catch (authError) {
+      const message = getRequestMessage(
+        authError,
+        "We could not create your portal account. Try again.",
+      );
+      const hint = getRequestHint(authError);
       if (authError.code === "ACCOUNT_EXISTS") {
-        setError(authError.message);
+        setRequestState({
+          tone: "error",
+          title: "Portal account already exists",
+          message,
+          hint,
+        });
       } else {
-        setError(authError.message || "We could not create your portal account. Try again.");
+        setRequestState({
+          tone: authError?.code === "NETWORK_ERROR" || authError?.status === 0 ? "network" : "error",
+          title: "We could not create the account",
+          message,
+          hint,
+        });
       }
     } finally {
       setIsSubmitting(false);
@@ -67,7 +88,7 @@ const PortalSignupPage = () => {
   return (
     <PortalAuthShell
       title="Create your portal account"
-      description="Set up your portal access so you can view orders, downloads, and digital event passes in one account."
+      description="Use this only if you have not bought from the site yet. Purchases already create portal access automatically for the same email."
       orderId={orderId}
       ticketId={ticketId}
     >
@@ -165,10 +186,15 @@ const PortalSignupPage = () => {
           ) : null}
         </div>
 
-        {error ? (
-          <div className="rounded-[1.5rem] border border-amber-200 bg-amber-50 p-4">
-            <p className="text-sm leading-7 text-amber-900">{error}</p>
-            {error.includes("already exists") ? (
+        {requestState ? (
+          <div>
+            <RequestStatusNotice
+              tone={requestState.tone}
+              title={requestState.title}
+              message={requestState.message}
+              hint={requestState.hint}
+            />
+            {requestState.title === "Portal account already exists" ? (
               <Button asChild variant="brand" size="pillSm" className="mt-4">
                 <Link
                   to={`/portal/login?${buildPortalSearch({
@@ -194,7 +220,7 @@ const PortalSignupPage = () => {
 
       <div className="mt-8 border-t border-slate-200 pt-6">
         <p className="text-sm text-slate-600">
-          Already have portal access?{" "}
+          Already bought something or already have portal access?{" "}
           <Link
             to={`/portal/login?${buildPortalSearch({
               email: formState.email,

@@ -10,6 +10,7 @@ import {
 import { ArrowLeft, Ticket } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import RequestStatusNotice from "@/components/ui/request-status-notice";
 import PaymentDetailsSection from "@/components/PaymentDetailsSection";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,6 +36,7 @@ import {
 } from "@/lib/api";
 import { openLencoPaymentWidget } from "@/lib/lenco";
 import { getPaymentMethodLabel } from "@/lib/payment";
+import { getRequestHint, getRequestMessage } from "@/lib/network";
 
 const defaultTheme = {
   primary: "rgba(124,45,18,0.84)",
@@ -54,7 +56,6 @@ const EventCheckoutPage = () => {
     formatFromUsdToCurrency,
     formatStoredAmount,
     getCheckoutPaymentOptions,
-    isZambian,
     siteCurrencyCode,
   } = useCommerce();
   const selectedTicketId = searchParams.get("ticket");
@@ -79,12 +80,18 @@ const EventCheckoutPage = () => {
     ticketOptions.find((item) => item.id === selectedTicketId) ||
     ticketOptions.find((item) => item.id === event?.defaultTicketType) ||
     ticketOptions[0];
+  const effectiveCurrencyCode =
+    requestedCurrencyCode === siteCurrencyCode || requestedCurrencyCode === "USD"
+      ? requestedCurrencyCode
+      : currencyCode;
+  const isCheckoutInZambia = effectiveCurrencyCode === siteCurrencyCode;
   const paymentOptions = useMemo(
     () =>
       getCheckoutPaymentOptions({
         purchaseType: "event-ticket",
+        currencyCode: effectiveCurrencyCode,
       }),
-    [getCheckoutPaymentOptions],
+    [effectiveCurrencyCode, getCheckoutPaymentOptions],
   );
   const defaultPaymentMethod = paymentOptions[0]?.value || "mobile-money";
 
@@ -99,6 +106,9 @@ const EventCheckoutPage = () => {
   const [isPaymentBusy, setIsPaymentBusy] = useState(false);
   const [paymentError, setPaymentError] = useState("");
   const [paymentFeedback, setPaymentFeedback] = useState("");
+  const [paymentStatusTitle, setPaymentStatusTitle] = useState("");
+  const [paymentStatusHint, setPaymentStatusHint] = useState("");
+  const [paymentStatusTone, setPaymentStatusTone] = useState("loading");
 
   useEffect(() => {
     if (!paymentOptions.some((option) => option.value === paymentMethod)) {
@@ -128,11 +138,18 @@ const EventCheckoutPage = () => {
       processingReferencesRef.current.add(reference);
       setIsPaymentBusy(true);
       setPaymentError("");
+      setPaymentStatusTone("loading");
+      setPaymentStatusTitle(
+        shouldPoll
+          ? "Confirming your ticket payment"
+          : "Verifying your ticket payment",
+      );
       setPaymentFeedback(
         shouldPoll
           ? "Confirming your ticket payment with Lenco..."
           : "Verifying your ticket payment...",
       );
+      setPaymentStatusHint("Please keep this page open while the verification finishes.");
 
       try {
         const verification = shouldPoll
@@ -145,21 +162,39 @@ const EventCheckoutPage = () => {
               ? "The payment was not approved. No ticket was created."
               : "We could not confirm the payment yet. If you were charged, try again shortly.",
           );
+          setPaymentStatusTone("error");
+          setPaymentStatusTitle("Ticket payment not confirmed");
+          setPaymentStatusHint(
+            verification?.status === "failed"
+              ? "You can try the payment again from this page."
+              : "If the charge already happened, wait a moment and retry verification.",
+          );
           toast.error("Ticket payment verification did not complete.");
           clearReferenceFromUrl();
           return;
         }
 
+        setPaymentStatusTone("success");
+        setPaymentStatusTitle("Ticket payment confirmed");
+        setPaymentFeedback("Your ticket has been linked to the portal.");
+        setPaymentStatusHint("Opening the portal now...");
         toast.success("Payment verified. Continue in the portal.");
         navigate(
           verification?.portalRedirect ||
             `/portal/login?role=${buyerType}&email=${encodeURIComponent(formState.email)}`,
         );
       } catch (error) {
-        setPaymentError(
-          error.message || "We could not confirm the payment. Please try again.",
+        const message = getRequestMessage(
+          error,
+          "We could not confirm the payment. Please try again.",
         );
-        toast.error(error.message || "Ticket payment verification failed.");
+        setPaymentError(message);
+        setPaymentStatusTone(
+          error?.code === "NETWORK_ERROR" || error?.status === 0 ? "network" : "error",
+        );
+        setPaymentStatusTitle("We could not verify your payment");
+        setPaymentStatusHint(getRequestHint(error));
+        toast.error(message);
         clearReferenceFromUrl();
       } finally {
         processingReferencesRef.current.delete(reference);
@@ -191,10 +226,6 @@ const EventCheckoutPage = () => {
   }
 
   const theme = { ...defaultTheme, ...(event.heroTheme || {}) };
-  const effectiveCurrencyCode =
-    requestedCurrencyCode === siteCurrencyCode || requestedCurrencyCode === "USD"
-      ? requestedCurrencyCode
-      : currencyCode;
   const unitPrice = convertFromUsdToCurrency(
     selectedTicket.price,
     effectiveCurrencyCode,
@@ -210,7 +241,7 @@ const EventCheckoutPage = () => {
     backgroundSize: "cover",
     backgroundPosition: "center",
   };
-  const paymentNotice = isZambian
+  const paymentNotice = isCheckoutInZambia
     ? "Online payments for Zambia open in the secure Lenco window."
     : "International ticket payments use secure card checkout in the Lenco window.";
 
@@ -233,7 +264,10 @@ const EventCheckoutPage = () => {
     }
 
     setIsPaymentBusy(true);
+    setPaymentStatusTone("loading");
+    setPaymentStatusTitle("Preparing secure payment");
     setPaymentFeedback("Preparing secure payment...");
+    setPaymentStatusHint("We are connecting to Lenco now.");
 
     try {
       const intent = await createLencoPaymentIntent({
@@ -263,6 +297,8 @@ const EventCheckoutPage = () => {
       });
 
       setPaymentFeedback("Opening the secure payment window...");
+      setPaymentStatusTitle("Opening secure payment");
+      setPaymentStatusHint("Finish the ticket payment in the Lenco window to continue.");
 
       await openLencoPaymentWidget({
         publicKey: intent.publicKey,
@@ -285,14 +321,24 @@ const EventCheckoutPage = () => {
 
           setIsPaymentBusy(false);
           setPaymentFeedback("");
+          setPaymentStatusHint("");
           toast.message("Payment window closed. No ticket was created.");
         },
       });
     } catch (error) {
       setIsPaymentBusy(false);
       setPaymentFeedback("");
-      setPaymentError(error.message || "We could not start secure checkout.");
-      toast.error(error.message || "Unable to start secure payment.");
+      const message = getRequestMessage(
+        error,
+        "We could not start secure checkout.",
+      );
+      setPaymentError(message);
+      setPaymentStatusTone(
+        error?.code === "NETWORK_ERROR" || error?.status === 0 ? "network" : "error",
+      );
+      setPaymentStatusTitle("Secure payment could not start");
+      setPaymentStatusHint(getRequestHint(error));
+      toast.error(message);
     }
   };
 
@@ -423,15 +469,23 @@ const EventCheckoutPage = () => {
             </div>
 
             {paymentError ? (
-              <div className="mt-6 rounded-[1.5rem] border border-amber-200 bg-amber-50 p-4">
-                <p className="text-sm leading-7 text-amber-900">{paymentError}</p>
-              </div>
+              <RequestStatusNotice
+                tone={paymentStatusTone}
+                title={paymentStatusTitle || "Payment issue"}
+                message={paymentError}
+                hint={paymentStatusHint}
+                className="mt-6"
+              />
             ) : null}
 
-            {paymentFeedback ? (
-              <div className="mt-6 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
-                <p className="text-sm leading-7 text-slate-700">{paymentFeedback}</p>
-              </div>
+            {!paymentError && paymentFeedback ? (
+              <RequestStatusNotice
+                tone={paymentStatusTone}
+                title={paymentStatusTitle || "Payment update"}
+                message={paymentFeedback}
+                hint={paymentStatusHint}
+                className="mt-6"
+              />
             ) : null}
 
             <Button

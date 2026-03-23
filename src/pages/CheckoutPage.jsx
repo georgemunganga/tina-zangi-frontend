@@ -10,6 +10,7 @@ import {
 import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import RequestStatusNotice from "@/components/ui/request-status-notice";
 import PaymentDetailsSection from "@/components/PaymentDetailsSection";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,6 +40,7 @@ import {
   getPaymentMethodLabel,
   isCashOnDeliveryMethod,
 } from "@/lib/payment";
+import { getRequestHint, getRequestMessage } from "@/lib/network";
 
 const CheckoutPage = () => {
   const { slug } = useParams();
@@ -55,7 +57,6 @@ const CheckoutPage = () => {
     formatFromUsdToCurrency,
     formatStoredAmount,
     getCheckoutPaymentOptions,
-    isZambian,
     siteCurrencyCode,
   } = useCommerce();
 
@@ -64,13 +65,19 @@ const CheckoutPage = () => {
     () => product?.formats.find((item) => item.type === formatType),
     [formatType, product],
   );
+  const effectiveCurrencyCode =
+    requestedCurrencyCode === siteCurrencyCode || requestedCurrencyCode === "USD"
+      ? requestedCurrencyCode
+      : currencyCode;
+  const isCheckoutInZambia = effectiveCurrencyCode === siteCurrencyCode;
   const paymentOptions = useMemo(
     () =>
       getCheckoutPaymentOptions({
         purchaseType: "book-order",
         formatType: selectedFormat?.type,
+        currencyCode: effectiveCurrencyCode,
       }),
-    [getCheckoutPaymentOptions, selectedFormat?.type],
+    [effectiveCurrencyCode, getCheckoutPaymentOptions, selectedFormat?.type],
   );
   const defaultPaymentMethod = paymentOptions[0]?.value || "mobile-money";
   const initialQuantity =
@@ -91,6 +98,9 @@ const CheckoutPage = () => {
   const [isPaymentBusy, setIsPaymentBusy] = useState(false);
   const [paymentError, setPaymentError] = useState("");
   const [paymentFeedback, setPaymentFeedback] = useState("");
+  const [paymentStatusTitle, setPaymentStatusTitle] = useState("");
+  const [paymentStatusHint, setPaymentStatusHint] = useState("");
+  const [paymentStatusTone, setPaymentStatusTone] = useState("loading");
 
   useEffect(() => {
     if (!paymentOptions.some((option) => option.value === paymentMethod)) {
@@ -124,11 +134,16 @@ const CheckoutPage = () => {
       processingReferencesRef.current.add(reference);
       setIsPaymentBusy(true);
       setPaymentError("");
+      setPaymentStatusTone("loading");
+      setPaymentStatusTitle(
+        shouldPoll ? "Confirming your payment" : "Verifying your payment",
+      );
       setPaymentFeedback(
         shouldPoll
           ? "Confirming your payment with Lenco..."
           : "Verifying your payment...",
       );
+      setPaymentStatusHint("Please keep this page open while the response comes back.");
 
       try {
         const verification = shouldPoll
@@ -141,21 +156,39 @@ const CheckoutPage = () => {
               ? "The payment was not approved. No order was created."
               : "We could not confirm the payment yet. If you were charged, try again shortly.",
           );
+          setPaymentStatusTone("error");
+          setPaymentStatusTitle("Payment not confirmed");
+          setPaymentStatusHint(
+            verification?.status === "failed"
+              ? "You can choose a different payment method and try again."
+              : "If the charge already happened, wait a moment and retry verification.",
+          );
           toast.error("Payment verification did not complete.");
           clearReferenceFromUrl();
           return;
         }
 
+        setPaymentStatusTone("success");
+        setPaymentStatusTitle("Payment confirmed");
+        setPaymentFeedback("Your order has been linked to the portal.");
+        setPaymentStatusHint("Opening the portal now...");
         toast.success("Payment verified. Continue in the portal.");
         navigate(
           verification?.portalRedirect ||
             `/portal/login?role=${buyerType}&email=${encodeURIComponent(formState.email)}`,
         );
       } catch (error) {
-        setPaymentError(
-          error.message || "We could not confirm the payment. Please try again.",
+        const message = getRequestMessage(
+          error,
+          "We could not confirm the payment. Please try again.",
         );
-        toast.error(error.message || "Payment verification failed.");
+        setPaymentError(message);
+        setPaymentStatusTone(
+          error?.code === "NETWORK_ERROR" || error?.status === 0 ? "network" : "error",
+        );
+        setPaymentStatusTitle("We could not verify your payment");
+        setPaymentStatusHint(getRequestHint(error));
+        toast.error(message);
         clearReferenceFromUrl();
       } finally {
         processingReferencesRef.current.delete(reference);
@@ -186,10 +219,6 @@ const CheckoutPage = () => {
     return <Navigate to={`/shop/${product.slug}`} replace />;
   }
 
-  const effectiveCurrencyCode =
-    requestedCurrencyCode === siteCurrencyCode || requestedCurrencyCode === "USD"
-      ? requestedCurrencyCode
-      : currencyCode;
   const unitPrice = convertFromUsdToCurrency(
     selectedFormat.price,
     effectiveCurrencyCode,
@@ -197,7 +226,7 @@ const CheckoutPage = () => {
   const total = Number((unitPrice * quantity).toFixed(2));
   const paymentNotice = isCashOnDeliveryMethod(paymentMethod)
     ? "This order is placed now and stays unpaid until delivery."
-    : isZambian
+    : isCheckoutInZambia
       ? "Online payments for Zambia open in the Lenco window."
       : "International checkout uses secure card payment in the Lenco window.";
 
@@ -235,20 +264,36 @@ const CheckoutPage = () => {
         });
 
         toast.success("Order placed. Payment will be collected on delivery.");
+        setPaymentStatusTone("success");
+        setPaymentStatusTitle("Order placed");
+        setPaymentFeedback("Your hardcopy order is now in the system.");
+        setPaymentStatusHint("Opening the linked portal account now...");
         navigate(
           result.portalRedirect ||
             `/portal/login?role=${buyerType}&email=${encodeURIComponent(formState.email)}`,
         );
         return;
       } catch (error) {
-        setPaymentError(error.message || "We could not place the COD order.");
-        toast.error(error.message || "Unable to place the order.");
+        const message = getRequestMessage(
+          error,
+          "We could not place the COD order.",
+        );
+        setPaymentError(message);
+        setPaymentStatusTone(
+          error?.code === "NETWORK_ERROR" || error?.status === 0 ? "network" : "error",
+        );
+        setPaymentStatusTitle("Order not placed");
+        setPaymentStatusHint(getRequestHint(error));
+        toast.error(message);
         return;
       }
     }
 
     setIsPaymentBusy(true);
+    setPaymentStatusTone("loading");
+    setPaymentStatusTitle("Preparing secure payment");
     setPaymentFeedback("Preparing secure payment...");
+    setPaymentStatusHint("We are connecting to Lenco now.");
 
     try {
       const intent = await createLencoPaymentIntent({
@@ -273,6 +318,8 @@ const CheckoutPage = () => {
       });
 
       setPaymentFeedback("Opening the secure payment window...");
+      setPaymentStatusTitle("Opening secure payment");
+      setPaymentStatusHint("Finish the payment in the Lenco window to continue.");
 
       await openLencoPaymentWidget({
         publicKey: intent.publicKey,
@@ -295,14 +342,24 @@ const CheckoutPage = () => {
 
           setIsPaymentBusy(false);
           setPaymentFeedback("");
+          setPaymentStatusHint("");
           toast.message("Payment window closed. No order was created.");
         },
       });
     } catch (error) {
       setIsPaymentBusy(false);
       setPaymentFeedback("");
-      setPaymentError(error.message || "We could not start secure checkout.");
-      toast.error(error.message || "Unable to start secure payment.");
+      const message = getRequestMessage(
+        error,
+        "We could not start secure checkout.",
+      );
+      setPaymentError(message);
+      setPaymentStatusTone(
+        error?.code === "NETWORK_ERROR" || error?.status === 0 ? "network" : "error",
+      );
+      setPaymentStatusTitle("Secure payment could not start");
+      setPaymentStatusHint(getRequestHint(error));
+      toast.error(message);
     }
   };
 
@@ -427,15 +484,23 @@ const CheckoutPage = () => {
             </div>
 
             {paymentError ? (
-              <div className="mt-6 rounded-[1.5rem] border border-amber-200 bg-amber-50 p-4">
-                <p className="text-sm leading-7 text-amber-900">{paymentError}</p>
-              </div>
+              <RequestStatusNotice
+                tone={paymentStatusTone}
+                title={paymentStatusTitle || "Payment issue"}
+                message={paymentError}
+                hint={paymentStatusHint}
+                className="mt-6"
+              />
             ) : null}
 
-            {paymentFeedback ? (
-              <div className="mt-6 rounded-[1.5rem] border border-slate-200 bg-slate-50 p-4">
-                <p className="text-sm leading-7 text-slate-700">{paymentFeedback}</p>
-              </div>
+            {!paymentError && paymentFeedback ? (
+              <RequestStatusNotice
+                tone={paymentStatusTone}
+                title={paymentStatusTitle || "Payment update"}
+                message={paymentFeedback}
+                hint={paymentStatusHint}
+                className="mt-6"
+              />
             ) : null}
 
             <Button

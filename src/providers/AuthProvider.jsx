@@ -63,6 +63,16 @@ function buildSessionFromUser(user, tokens = {}) {
   return {
     id: user?.id || "portal-user",
     role: user?.role || "individual",
+    portalMode: user?.portalMode || "individual",
+    groupType: user?.groupType || null,
+    hasIndividualAccess:
+      typeof user?.hasIndividualAccess === "boolean"
+        ? user.hasIndividualAccess
+        : (user?.role || "individual") === "individual",
+    hasGroupAccess:
+      typeof user?.hasGroupAccess === "boolean"
+        ? user.hasGroupAccess
+        : ["corporate", "wholesale"].includes(user?.role || ""),
     name: user?.name || "Portal User",
     email: normalizePortalEmail(user?.email),
     phone: user?.phone || "",
@@ -203,6 +213,16 @@ export const AuthProvider = ({ children }) => {
           return {
             email: result.email || normalizedEmail,
             role: result.role || "individual",
+            portalMode: result.portalMode || "individual",
+            groupType: result.groupType || null,
+            hasIndividualAccess:
+              typeof result.hasIndividualAccess === "boolean"
+                ? result.hasIndividualAccess
+                : (result.role || "individual") === "individual",
+            hasGroupAccess:
+              typeof result.hasGroupAccess === "boolean"
+                ? result.hasGroupAccess
+                : ["corporate", "wholesale"].includes(result.role || ""),
             expiresAt: result.expiresAt || null,
             devOtpCode: result.devOtpCode || "",
           };
@@ -210,7 +230,7 @@ export const AuthProvider = ({ children }) => {
           if (error.status === 404) {
             throw createAuthError(
               "ACCOUNT_NOT_FOUND",
-              "We could not find a portal account for this email. Create one to continue.",
+              "We could not find a purchase-linked portal account for this email yet. Create one manually if you have not bought anything yet.",
               error,
             );
           }
@@ -224,6 +244,20 @@ export const AuthProvider = ({ children }) => {
           return {
             email: result.email,
             role: result.role || payload.role,
+            portalMode:
+              result.portalMode ||
+              (payload.role === "individual" ? "individual" : "group"),
+            groupType:
+              result.groupType ||
+              (payload.role === "individual" ? null : payload.role),
+            hasIndividualAccess:
+              typeof result.hasIndividualAccess === "boolean"
+                ? result.hasIndividualAccess
+                : payload.role === "individual",
+            hasGroupAccess:
+              typeof result.hasGroupAccess === "boolean"
+                ? result.hasGroupAccess
+                : payload.role !== "individual",
             expiresAt: result.expiresAt || null,
             devOtpCode: result.devOtpCode || "",
           };

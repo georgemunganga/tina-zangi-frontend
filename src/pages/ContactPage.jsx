@@ -6,6 +6,8 @@ import PageHero from "@/components/PageHero";
 import { contactDetails } from "@/data/mock";
 import { Button } from "@/components/ui/button";
 import { submitContactMessage } from "@/lib/api";
+import RequestStatusNotice from "@/components/ui/request-status-notice";
+import { getRequestHint, getRequestMessage } from "@/lib/network";
 
 const ContactPage = () => {
   const [formState, setFormState] = useState({
@@ -14,18 +16,42 @@ const ContactPage = () => {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [requestState, setRequestState] = useState(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     setIsSubmitting(true);
+    setRequestState({
+      tone: "loading",
+      title: "Sending your message",
+      message: "We are submitting your message to the Zangi team now.",
+      hint: "Please keep this page open until the request finishes.",
+    });
 
     try {
-      await submitContactMessage(formState);
+      const result = await submitContactMessage(formState);
       toast.success("Message received. We will be in touch soon.");
+      setRequestState({
+        tone: "success",
+        title: "Message sent",
+        message: "Your message has been received and the team has been notified.",
+        hint: `Reference #${result.contactMessageId} has been created for this request.`,
+      });
       setFormState({ name: "", email: "", message: "" });
     } catch (error) {
-      toast.error(error.message || "We could not send your message right now.");
+      const message = getRequestMessage(
+        error,
+        "We could not send your message right now.",
+      );
+      const hint = getRequestHint(error);
+      setRequestState({
+        tone: error?.code === "NETWORK_ERROR" || error?.status === 0 ? "network" : "error",
+        title: "Message not sent",
+        message,
+        hint,
+      });
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -111,6 +137,14 @@ const ContactPage = () => {
               Send a message
             </p>
             <div className="mt-6 grid gap-5">
+              {requestState ? (
+                <RequestStatusNotice
+                  tone={requestState.tone}
+                  title={requestState.title}
+                  message={requestState.message}
+                  hint={requestState.hint}
+                />
+              ) : null}
               <label className="grid gap-2">
                 <span className="text-sm font-medium text-slate-700">Name</span>
                 <input

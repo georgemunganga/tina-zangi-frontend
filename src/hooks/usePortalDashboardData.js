@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   fetchPortalOrders,
@@ -9,13 +9,45 @@ import { getPortalNavItems } from "@/lib/portal-dashboard";
 import { useCommerce } from "@/providers/CommerceProvider";
 import { useAuth } from "@/providers/AuthProvider";
 
+function derivePortalMode(session) {
+  if (session?.portalMode) {
+    return session.portalMode;
+  }
+
+  return ["corporate", "wholesale"].includes(session?.role) ? "group" : "individual";
+}
+
+function deriveGroupType(session, portalMode) {
+  if (session?.groupType) {
+    return session.groupType;
+  }
+
+  if (portalMode !== "group") {
+    return null;
+  }
+
+  return session?.role === "wholesale" ? "wholesale" : "corporate";
+}
+
+function deriveSupportsTickets(session, portalMode, groupType) {
+  if (typeof session?.hasIndividualAccess === "boolean" || typeof session?.hasGroupAccess === "boolean") {
+    return Boolean(session?.hasIndividualAccess) || groupType === "corporate";
+  }
+
+  return portalMode === "individual" || groupType === "corporate";
+}
+
 export function usePortalDashboardData() {
   const location = useLocation();
   const { session, accessToken, isAuthenticated } = useAuth();
   const { formatStoredAmount } = useCommerce();
-  const currentRole = session?.role || "individual";
-  const supportsTickets = currentRole === "individual" || currentRole === "corporate";
-  const navItems = useMemo(() => getPortalNavItems(currentRole), [currentRole]);
+  const currentRole = derivePortalMode(session);
+  const currentGroupType = deriveGroupType(session, currentRole);
+  const supportsTickets = deriveSupportsTickets(session, currentRole, currentGroupType);
+  const navItems = useMemo(
+    () => getPortalNavItems(currentRole, { supportsTickets }),
+    [currentRole, supportsTickets],
+  );
   const [overviewData, setOverviewData] = useState({
     latestReference: null,
     metrics: [],
@@ -27,11 +59,16 @@ export function usePortalDashboardData() {
   const [ticketsData, setTicketsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [reloadCount, setReloadCount] = useState(0);
 
   const searchParams = useMemo(
     () => new URLSearchParams(location.search),
     [location.search],
   );
+
+  const reloadDashboard = useCallback(() => {
+    setReloadCount((current) => current + 1);
+  }, []);
 
   useEffect(() => {
     if (!isAuthenticated || !accessToken) {
@@ -115,41 +152,62 @@ export function usePortalDashboardData() {
     return () => {
       isCancelled = true;
     };
-  }, [accessToken, isAuthenticated, searchParams, session?.notes, supportsTickets]);
+  }, [
+    accessToken,
+    isAuthenticated,
+    reloadCount,
+    searchParams,
+    session?.notes,
+    supportsTickets,
+  ]);
 
   const currentUser = useMemo(
     () => ({
       id: session?.id || "portal-session",
       role: currentRole,
+      portalMode: currentRole,
+      groupType: currentGroupType,
       name: session?.name || "Portal User",
       email: session?.email || "",
       organizationName: session?.organizationName || "",
+      accountLabel:
+        currentRole === "group"
+          ? currentGroupType === "wholesale"
+            ? "Wholesale account"
+            : "Corporate account"
+          : "Individual account",
       headline:
         session?.headline ||
-        (currentRole === "wholesale"
-          ? "Your wholesale portal"
-          : currentRole === "corporate"
-            ? "Your organization portal"
-            : "Your reading hub"),
+        (currentRole === "group"
+          ? currentGroupType === "wholesale"
+            ? "Your wholesale portal"
+            : "Your organization portal"
+          : "Your reading hub"),
       notes:
         overviewData.notes?.length
           ? overviewData.notes
           : session?.notes ||
-            (currentRole === "wholesale"
-              ? [
-                  "Track bulk book orders and fulfillment progress here.",
-                  "Wholesale accounts focus on orders rather than ticket access.",
-                ]
+            (currentRole === "group"
+              ? currentGroupType === "wholesale"
+                ? [
+                    "Track bulk book orders and fulfillment progress here.",
+                    "Wholesale accounts focus on orders rather than ticket access.",
+                  ]
+                : [
+                    "Track organization orders and any linked event tickets in one place.",
+                    "Purchases linked to this email will appear in this group account.",
+                  ]
               : [
                   "Review orders, downloads, and tickets in one place.",
                   "New purchases appear here when they match this account email.",
                 ]),
     }),
-    [currentRole, overviewData.notes, session],
+    [currentGroupType, currentRole, overviewData.notes, session],
   );
 
   return {
     currentRole,
+    currentGroupType,
     currentUser,
     navItems,
     supportsTickets: overviewData.supportsTickets ?? supportsTickets,
@@ -161,5 +219,6 @@ export function usePortalDashboardData() {
     formatStoredAmount,
     isLoading,
     error,
+    reloadDashboard,
   };
 }

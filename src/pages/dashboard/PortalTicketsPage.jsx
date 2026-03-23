@@ -8,15 +8,15 @@ import { usePortalDashboardContext } from "@/pages/dashboard/PortalLayout";
 const PortalTicketsPage = () => {
   const {
     allTickets,
-    currentRole,
     error,
     formatStoredAmount,
     isLoading,
+    reloadDashboard,
     supportsTickets,
   } =
     usePortalDashboardContext();
 
-  if (!supportsTickets || currentRole === "wholesale") {
+  if (!supportsTickets) {
     return <Navigate to="/portal/orders" replace />;
   }
 
@@ -30,7 +30,14 @@ const PortalTicketsPage = () => {
   }
 
   if (error) {
-    return <PortalEmptyState title="Tickets are unavailable" description={error} />;
+    return (
+      <PortalEmptyState
+        title="Tickets are unavailable"
+        description={error}
+        actionLabel="Try again"
+        onAction={reloadDashboard}
+      />
+    );
   }
 
   return (

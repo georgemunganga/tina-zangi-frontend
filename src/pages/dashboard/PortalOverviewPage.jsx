@@ -12,6 +12,7 @@ const PortalOverviewPage = () => {
     latestReference,
     overviewMetrics,
     recentActivity,
+    reloadDashboard,
   } = usePortalDashboardContext();
 
   if (isLoading) {
@@ -24,7 +25,14 @@ const PortalOverviewPage = () => {
   }
 
   if (error) {
-    return <PortalEmptyState title="Portal data is unavailable" description={error} />;
+    return (
+      <PortalEmptyState
+        title="Portal data is unavailable"
+        description={error}
+        actionLabel="Try again"
+        onAction={reloadDashboard}
+      />
+    );
   }
 
   return (
