@@ -186,11 +186,11 @@ export const books = [
 
 export const events = [
   {
-    id: "mulungushi-book-launch",
-    slug: "zangi-book-launch-mulungushi-lusaka",
+    id: "NIPA-book-launch",
+    slug: "zangi-book-launch-NIPA-lusaka",
     title: "Zangi's Flag Book Launch",
     subtitle:
-      "A live family book launch at Mulungushi in Lusaka with storytelling, launch moments, and warm community energy.",
+      "A live family book launch at NIPA in Lusaka with storytelling, launch moments, and warm community energy.",
     excerpt:
       "Right now the Zangi events section is focused on one physical launch in Lusaka for children, parents, schools, and invited community guests.",
     description:
@@ -201,7 +201,7 @@ export const events = [
     liveWindowHours: 5,
     dateLabel: "April 3, 2026",
     timeLabel: "6:00 PM - 7:30 PM CAT",
-    locationLabel: "Mulungushi International Conference Centre, Lusaka",
+    locationLabel: "NIPA  Conference Hall, Lusaka",
     mode: "in-person",
     image: "/images/banner bg (1).png",
     teaserImage: "/images/Save the date  23rd December (10) (1).png",
@@ -548,12 +548,12 @@ export const portalUsers = [
       {
         id: "ZT-4021",
         purchaseType: "event-ticket",
-        eventSlug: "zangi-book-launch-mulungushi-lusaka",
+        eventSlug: "zangi-book-launch-NIPA-lusaka",
         eventTitle: "Zangi's Flag Book Launch",
         startDate: "2026-05-22",
         dateLabel: "May 22, 2026",
         timeLabel: "6:00 PM - 7:30 PM CAT",
-        locationLabel: "Mulungushi International Conference Centre, Lusaka",
+        locationLabel: "NIPA  Conference Hall, Lusaka",
         buyerType: "individual",
         buyerName: "Nia Mokoena",
         email: "nia@example.com",
@@ -613,12 +613,12 @@ export const portalUsers = [
       {
         id: "ZT-5178",
         purchaseType: "event-ticket",
-        eventSlug: "zangi-book-launch-mulungushi-lusaka",
+        eventSlug: "zangi-book-launch-NIPA-lusaka",
         eventTitle: "Zangi's Flag Book Launch",
         startDate: "2026-05-22",
         dateLabel: "May 22, 2026",
         timeLabel: "6:00 PM - 7:30 PM CAT",
-        locationLabel: "Mulungushi International Conference Centre, Lusaka",
+        locationLabel: "NIPA Conference Hall, Lusaka",
         buyerType: "corporate",
         buyerName: "Lebo Naidoo",
         email: "library@learningbridge.org",
