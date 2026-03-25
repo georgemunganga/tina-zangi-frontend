@@ -6,9 +6,9 @@ const DEFAULT_LOCAL_API_BASE_URL =
 
 const DEFAULT_DEPLOYED_API_BASE_URL = "https://app.zangisworld.com";
 
+// Use environment variable if set, otherwise use default based on hostname
 const API_BASE_URL = String(
-  process.env.REACT_APP_LARAVEL_API_BASE_URL ||
-    process.env.REACT_APP_API_BASE_URL ||
+  process.env.REACT_APP_API_BASE_URL ||
     DEFAULT_LOCAL_API_BASE_URL ||
     DEFAULT_DEPLOYED_API_BASE_URL,
 )
