@@ -1,19 +1,7 @@
-const DEFAULT_LOCAL_API_BASE_URL =
-  typeof window !== "undefined" &&
-  /^(localhost|127\.0\.0\.1)$/i.test(window.location.hostname)
-    ? "http://localhost:8000"
-    : "";
-
 const DEFAULT_DEPLOYED_API_BASE_URL = "https://app.zangisworld.com";
 
-// Use environment variable if set, otherwise use default based on hostname
-const API_BASE_URL = String(
-  process.env.REACT_APP_API_BASE_URL ||
-    DEFAULT_LOCAL_API_BASE_URL ||
-    DEFAULT_DEPLOYED_API_BASE_URL,
-)
-  .trim()
-  .replace(/\/$/, "");
+// Use production URL by default
+const API_BASE_URL = DEFAULT_DEPLOYED_API_BASE_URL.trim().replace(/\/$/, "");
 
 const INTENT_ENDPOINT =
   process.env.REACT_APP_LENCO_INTENT_ENDPOINT || "/api/v1/payments/lenco/intent";
