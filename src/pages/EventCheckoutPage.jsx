@@ -28,7 +28,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { events } from "@/data/mock";
 import {
   createLencoPaymentIntent,
   pollLencoPaymentVerification,
@@ -41,6 +40,7 @@ import {
   getEventTicketDisplayLabel,
   resolveEventTicketSales,
 } from "@/lib/event-ticket-pricing";
+import { findEventBySlug } from "@/lib/events";
 
 const defaultTheme = {
   primary: "rgba(124,45,18,0.84)",
@@ -53,7 +53,7 @@ const EventCheckoutPage = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const event = useMemo(() => events.find((item) => item.slug === slug), [slug]);
+  const event = useMemo(() => findEventBySlug(slug), [slug]);
   const salesState = useMemo(() => resolveEventTicketSales(event), [event]);
   const {
     formatStoredAmount,

@@ -11,7 +11,7 @@ import {
 import EventCountdownSection from "@/components/EventCountdownSection";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { events } from "@/data/mock";
+import { findEventBySlug } from "@/lib/events";
 import {
   getEventTicketDisplayLabel,
   resolveEventTicketSales,
@@ -166,7 +166,7 @@ const EventDetailPage = () => {
   const { slug } = useParams();
   const [searchParams] = useSearchParams();
   const { formatStoredAmount, siteCurrencyCode } = useCommerce();
-  const event = useMemo(() => events.find((item) => item.slug === slug), [slug]);
+  const event = useMemo(() => findEventBySlug(slug), [slug]);
   const salesState = useMemo(() => resolveEventTicketSales(event), [event]);
   const ticketOptions = useMemo(
     () => salesState.ticketOptions,
