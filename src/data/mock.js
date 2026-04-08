@@ -187,7 +187,7 @@ export const books = [
 export const events = [
   {
     id: "NIPA-book-launch",
-    slug: "zangi-book-launch-mulungushi-lusaka",
+    slug: "zangi-book-launch-lusaka",
     legacySlugs: ["zangi-book-launch-NIPA-lusaka"],
     title: "Zangi's Flag Book Launch",
     subtitle:
@@ -549,7 +549,7 @@ export const portalUsers = [
       {
         id: "ZT-4021",
         purchaseType: "event-ticket",
-        eventSlug: "zangi-book-launch-mulungushi-lusaka",
+        eventSlug: "zangi-book-launch-lusaka",
         eventTitle: "Zangi's Flag Book Launch",
         startDate: "2026-05-17",
         dateLabel: "May 17, 2026",
@@ -614,7 +614,7 @@ export const portalUsers = [
       {
         id: "ZT-5178",
         purchaseType: "event-ticket",
-        eventSlug: "zangi-book-launch-mulungushi-lusaka",
+        eventSlug: "zangi-book-launch-lusaka",
         eventTitle: "Zangi's Flag Book Launch",
         startDate: "2026-05-17",
         dateLabel: "May 17, 2026",
